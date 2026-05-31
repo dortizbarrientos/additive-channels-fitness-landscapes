@@ -67,7 +67,7 @@ cat _figure_audit/skipped_dirs.tsv
 
 `zip_inventory.tsv` is the new file in v3. It records relevant figures and scripts found inside zip archives without extracting them.
 
-## Building the reviewer-facing run script
+## Building the run script
 
 After inspecting the audit, copy the command template:
 
