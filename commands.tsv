@@ -1,0 +1,9 @@
+figure_id	command	expected_outputs	status	notes
+F1	TODO	additiveChannels/figures/figure1_channel.pdf	TODO	TeX line 408; include figure1_channel.pdf. Fill after checking _figure_audit/candidate_matches.tsv, figure_name_candidates.tsv, and zip_inventory.tsv.
+F2	TODO	additiveChannels/figures/figure2_validation.pdf	TODO	TeX line 591; include figure2_validation.pdf. Fill after checking _figure_audit/candidate_matches.tsv, figure_name_candidates.tsv, and zip_inventory.tsv.
+F3	TODO	additiveChannels/figures/figure3_framework.pdf	TODO	TeX line 692; include figure3_framework.pdf. Fill after checking _figure_audit/candidate_matches.tsv, figure_name_candidates.tsv, and zip_inventory.tsv.
+F4	TODO	additiveChannels/figures/figure4_trajectory.pdf	TODO	TeX line 826; include figure4_trajectory.pdf. Fill after checking _figure_audit/candidate_matches.tsv, figure_name_candidates.tsv, and zip_inventory.tsv.
+F5	TODO	additiveChannels/figures/figure5_natural_vs_breeding.pdf	TODO	TeX line 854; include figure5_natural_vs_breeding.pdf. Fill after checking _figure_audit/candidate_matches.tsv, figure_name_candidates.tsv, and zip_inventory.tsv.
+S5.1	TODO	additiveChannels/figures/multiseed_4trait_moving.png	TODO	TeX line 1384; include multiseed_4trait_moving.png. Fill after checking _figure_audit/candidate_matches.tsv, figure_name_candidates.tsv, and zip_inventory.tsv.
+S5.2	TODO	additiveChannels/figures/cv_4trait_moving.png	TODO	TeX line 1403; include cv_4trait_moving.png. Fill after checking _figure_audit/candidate_matches.tsv, figure_name_candidates.tsv, and zip_inventory.tsv.
+S5.3	TODO	additiveChannels/figures/geom_invariants_4trait_moving.png	TODO	TeX line 1432; include geom_invariants_4trait_moving.png. Fill after checking _figure_audit/candidate_matches.tsv, figure_name_candidates.tsv, and zip_inventory.tsv.

@@ -1,0 +1,9 @@
+figure_id	tex_line	include	expected_output	status	notes
+F1	408	figure1_channel.pdf	additiveChannels/figures/figure1_channel.pdf	unverified	From final TeX.
+F2	591	figure2_validation.pdf	additiveChannels/figures/figure2_validation.pdf	unverified	From final TeX.
+F3	692	figure3_framework.pdf	additiveChannels/figures/figure3_framework.pdf	unverified	From final TeX.
+F4	826	figure4_trajectory.pdf	additiveChannels/figures/figure4_trajectory.pdf	unverified	From final TeX.
+F5	854	figure5_natural_vs_breeding.pdf	additiveChannels/figures/figure5_natural_vs_breeding.pdf	unverified	From final TeX.
+S5.1	1384	multiseed_4trait_moving.png	additiveChannels/figures/multiseed_4trait_moving.png	unverified	From final TeX.
+S5.2	1403	cv_4trait_moving.png	additiveChannels/figures/cv_4trait_moving.png	unverified	From final TeX.
+S5.3	1432	geom_invariants_4trait_moving.png	additiveChannels/figures/geom_invariants_4trait_moving.png	unverified	From final TeX.
