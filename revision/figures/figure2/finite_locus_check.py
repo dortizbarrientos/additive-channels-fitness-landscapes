@@ -111,7 +111,7 @@ def run_finite_locus_sweep(n_triples_per_arch=80, N_samples=20_000, seed=42):
 if __name__ == "__main__":
     print("Running finite-locus sweep...")
     df = run_finite_locus_sweep(n_triples_per_arch=80, N_samples=20_000)
-    df.to_csv('/home/claude/figs/output/finite_locus_sweep.csv', index=False)
+    df.to_csv('finite_locus_sweep.csv', index=False)
     
     print(f"\nTotal rows: {len(df)}")
     

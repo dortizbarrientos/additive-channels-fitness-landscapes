@@ -97,4 +97,4 @@ if __name__ == "__main__":
     print(f"  At gen 200: σ² = {df['sigma2'].iloc[200]:.4f}, |b| = {df['b_mag'].iloc[200]:.4f}, A_g = {df['Ag'].iloc[200]:.4f}")
     print(f"  At gen 499: σ² = {df['sigma2'].iloc[499]:.4f}, |b| = {df['b_mag'].iloc[499]:.4f}, A_g = {df['Ag'].iloc[499]:.4f}")
     
-    df.to_csv('/home/claude/figs/output/adaptation_v2.csv', index=False)
+    df.to_csv('adaptation_v2.csv', index=False)

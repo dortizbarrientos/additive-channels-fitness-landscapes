@@ -17,7 +17,7 @@ mpl.rcParams.update({
 GREEN = '#2D5A3D'; ORANGE = '#D97A2C'; MUTED = '#6B6048'
 RULE = '#C9BFA2'; PALE_GREEN = '#C8D9CD'; BLUE_GREEN = '#4A7B5A'
 
-df = pd.read_csv('/home/claude/figs/output/validation_sweep_v2.csv')
+df = pd.read_csv('validation_sweep.csv')
 g = df[df['dist'] == 'gaussian'].copy()
 poly = df[df['dist'] == 'polygenic'].copy()
 rare = df[df['dist'] == 'rare_large'].copy()
@@ -121,7 +121,7 @@ ax.text(0.50, 0.04, f'  ~20× drop  ', fontsize=9.5, color=GREEN, fontweight='60
 ax.set_xticks([0, 0.25, 0.5, 0.75, 1.0])
 ax.tick_params(direction='out', length=4, color=RULE)
 
-plt.savefig('/home/claude/figs/output/figure2_validation.pdf', bbox_inches='tight')
-plt.savefig('/home/claude/figs/output/figure2_validation.png', bbox_inches='tight', dpi=300)
+plt.savefig('figure2_validation.pdf', bbox_inches='tight')
+plt.savefig('figure2_validation.png', bbox_inches='tight', dpi=300)
 plt.close()
 print("Saved v5")

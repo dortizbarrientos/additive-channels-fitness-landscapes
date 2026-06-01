@@ -92,7 +92,7 @@ def run_rare_allele_sweep(n_triples=80, N_samples=20_000, seed=42):
 
 if __name__ == "__main__":
     df = run_rare_allele_sweep()
-    df.to_csv('/home/claude/figs/output/rare_alleles_sweep.csv', index=False)
+    df.to_csv('rare_alleles_sweep.csv', index=False)
     
     print("=== Empirical excess kurtosis by architecture ===")
     print(df.groupby('architecture')['excess_kurtosis'].agg(['mean', 'std', 'max']).round(3))

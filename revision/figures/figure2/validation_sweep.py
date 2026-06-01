@@ -20,7 +20,6 @@ from sim_core import (analytical_Ag, empirical_R2, empirical_spearman,
 
 # Reuse the rare-large-effect sampler
 import sys
-sys.path.insert(0, '/home/claude/figs/code')
 from rare_alleles_check import sample_with_rare_large_effect
 
 
@@ -90,7 +89,7 @@ def run_sweep(n_triples=400, N_samples=20_000, seed=42):
 if __name__ == "__main__":
     print("Running sweep with biologically realistic departures...")
     df = run_sweep(n_triples=400, N_samples=20_000, seed=42)
-    df.to_csv('/home/claude/figs/output/validation_sweep_v2.csv', index=False)
+    df.to_csv('validation_sweep.csv', index=False)
     print(f"Total rows: {len(df)}")
     print(f"Triples: {df['triple_id'].nunique()}")
 

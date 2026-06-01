@@ -5,8 +5,7 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 from matplotlib.colors import LinearSegmentedColormap
 import sys
-sys.path.insert(0, '/home/claude/figs/code')
-from adaptation_v2 import simulate_directional_then_relaxed
+from adaptation_simulation import simulate_directional_then_relaxed
 
 mpl.rcParams.update({
     'font.family': 'serif', 'font.size': 10, 'axes.titlesize': 11,
@@ -147,7 +146,7 @@ cbar = fig.colorbar(cs, ax=ax, fraction=0.04, pad=0.025)
 cbar.set_label(r'$\mathcal{A}_g$', fontsize=10)
 cbar.ax.tick_params(labelsize=8.5)
 
-plt.savefig('/home/claude/figs/output/figure3_trajectory.pdf', bbox_inches='tight')
-plt.savefig('/home/claude/figs/output/figure3_trajectory.png', bbox_inches='tight', dpi=300)
+plt.savefig('figure3_trajectory.pdf', bbox_inches='tight')
+plt.savefig('figure3_trajectory.png', bbox_inches='tight', dpi=300)
 plt.close()
 print("Saved v2")

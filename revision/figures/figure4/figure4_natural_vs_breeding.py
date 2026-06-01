@@ -273,8 +273,8 @@ axD.text(1.5, 1.3e-7,
 plt.subplots_adjust(left=0.075, right=0.985, bottom=0.085, top=0.94,
                     wspace=0.28, hspace=0.42)
 
-out_pdf = '/home/claude/figs/out/figure4_natural_vs_breeding.pdf'
-out_png = '/home/claude/figs/out/figure4_natural_vs_breeding.png'
+out_pdf = 'figure4_natural_vs_breeding.pdf'
+out_png = 'figure4_natural_vs_breeding.png'
 plt.savefig(out_pdf, dpi=400)
 plt.savefig(out_png, dpi=200)
 print(f'\nSaved: {out_pdf}')
