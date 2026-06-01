@@ -13,6 +13,8 @@
 
 set -euo pipefail
 
+PYTHON_BIN="${PYTHON_BIN:-python3}"
+
 COMMANDS_FILE="${COMMANDS_FILE:-commands.tsv}"
 LOG_DIR="${LOG_DIR:-_repro_logs}"
 SKIP_TODO=0
@@ -108,7 +110,7 @@ failed=0
 } < "$COMMANDS_FILE"
 
 if [[ "$DRY_RUN" != "1" ]]; then
-  python verify_outputs.py --commands "$COMMANDS_FILE" --out "$LOG_DIR/output_checksums.tsv"
+  ${PYTHON_BIN} verify_outputs.py --commands "$COMMANDS_FILE" --out "$LOG_DIR/output_checksums.tsv"
 fi
 
 echo "Done. Ran ${ran} command(s), skipped ${skipped} TODO row(s), failed ${failed}. Logs are in ${LOG_DIR}."
