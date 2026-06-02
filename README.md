@@ -1,7 +1,5 @@
 # Additive channels in curved fitness landscapes
 
-Reviewer-facing reproducibility package for the figure outputs associated with:
-
 **Additive Channels in Curved Fitness Landscapes**  
 Daniel Ortiz-Barrientos and Mark Cooper
 
