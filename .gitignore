@@ -3,27 +3,48 @@
 .AppleDouble
 .LSOverride
 
-# Python
-__pycache__/
-*.py[cod]
-*.pyo
+# Python environments and caches
 .venv/
 venv/
 ENV/
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.ipynb_checkpoints/
 
-# Local run products
+# R/local analysis state
+.Rhistory
+.RData
+.Rproj.user/
+
+# Reproduction products generated locally
 _repro_logs/
 _repro_work/
-_figure_audit/
-_local_backups/
+_repro_outputs/
 
-# Audit packages no longer part of final reviewer-facing repo
-audit_figures.py
+# Local backups/helper scripts created during cleanup
+_local_backups/
+*.bak
+*.bak_*
+*.bak_fig2_paths
+commands.tsv.bak.*
+_s5_and_static_provenance_search.txt
+repo_clean_finalise_additive_channels.sh
+repo_runall_hotfix_v4.sh
+repo_stage_final_package_v6.sh
+patch_repro_paths_and_modules_v5.sh
+fix_fig2_local_paths_additive_channels.sh
+repo_portability_polish_v7.sh
+
+# Older audit packages no longer part of the final reviewer-facing repo
+_figure_audit/
 additive_channels_figure_repro_audit/
 additive_channels_figure_repro_audit_v3/
 additive_channels_figure_repro_audit*.zip
+audit_figures.py
 
-# Root-level overflow from broader project
+# Root-level overflow from the broader project; not part of this minimal repo
 /additiveChannels/
 /code/
 /figsPaper2/
@@ -46,12 +67,12 @@ additive_channels_figure_repro_audit*.zip
 /paper_2_channel_switching.tex
 /paper_3_dynamical_closure.tex
 
-# Duplicate zip bundles; folder contents are retained instead
+# Duplicate zip bundles. Folder contents are retained instead.
 /revision/figures/figure2.zip
 /revision/figures/figure3.zip
 /revision/figures/figure4.zip
 
-# Extra revision material not in final reproducibility package
+# Extra revision/reviewer material outside the figure reproducibility package
 /revision/additive_channels_final_verification_package/
 /revision/comments/
 /revision/reviews.docx
@@ -120,19 +141,3 @@ additive_channels_figure_repro_audit*.zip
 *.run.xml
 *.synctex.gz
 *.toc
-/.venv/
-/_local_backups/
-/_repro_logs/
-/_repro_work/
-/_figure_audit/
-/_s5_and_static_provenance_search.txt
-/repo_clean_finalise_additive_channels.sh
-/repo_runall_hotfix_v4.sh
-/patch_repro_paths_and_modules_v5.sh
-/fix_fig2_local_paths_additive_channels.sh
-/commands.tsv.bak.*
-*.bak_fig2_paths
-*.bak_*
-/additive_channels_figure_repro_audit/
-/additive_channels_figure_repro_audit_v3/
-/additive_channels_figure_repro_audit*.zip

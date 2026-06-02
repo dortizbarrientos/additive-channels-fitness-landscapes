@@ -16,6 +16,10 @@ def sha256_file(path: Path) -> str:
     return h.hexdigest()
 
 
+def split_outputs(value: str) -> list[str]:
+    return [x.strip() for x in value.replace(";", ",").split(",") if x.strip()]
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Verify figure outputs listed in commands.tsv.")
     parser.add_argument("--manifest", default="commands.tsv")
@@ -30,20 +34,19 @@ def main() -> int:
         print(f"ERROR: missing manifest: {manifest}", file=sys.stderr)
         return 1
 
-    rows_out = []
-    missing = []
+    rows_out: list[dict[str, str]] = []
+    missing: list[tuple[str, str]] = []
 
     with manifest.open(newline="") as f:
         reader = csv.DictReader(f, delimiter="\t")
         required = {"figure_id", "expected_outputs"}
         if reader.fieldnames is None or not required.issubset(set(reader.fieldnames)):
-            print(f"ERROR: {manifest} does not look like a tab-separated manifest with columns {sorted(required)}", file=sys.stderr)
-            print(f"Observed columns: {reader.fieldnames}", file=sys.stderr)
+            print(f"ERROR: manifest must contain columns: {sorted(required)}", file=sys.stderr)
             return 1
+
         for row in reader:
             fig_id = row["figure_id"]
-            outputs = [x.strip() for x in row["expected_outputs"].replace(";", ",").split(",") if x.strip()]
-            for item in outputs:
+            for item in split_outputs(row["expected_outputs"]):
                 p = Path(item)
                 if not p.exists():
                     missing.append((fig_id, item))

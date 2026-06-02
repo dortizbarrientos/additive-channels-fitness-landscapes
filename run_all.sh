@@ -4,16 +4,6 @@ set -euo pipefail
 DRY_RUN=0
 SKIP_TODO=0
 
-# Prefer the active virtual environment's python. If there is no `python`, fall back to python3.
-if [[ -z "${PYTHON_BIN:-}" ]]; then
-  if command -v python >/dev/null 2>&1; then
-    PYTHON_BIN="python"
-  else
-    PYTHON_BIN="python3"
-  fi
-fi
-export PYTHON_BIN
-
 for arg in "$@"; do
   case "$arg" in
     --dry-run) DRY_RUN=1 ;;
@@ -35,23 +25,38 @@ if [[ ! -f "$MANIFEST" ]]; then
   exit 1
 fi
 
+if [[ -z "${PYTHON_BIN:-}" ]]; then
+  if [[ -n "${VIRTUAL_ENV:-}" && -x "$VIRTUAL_ENV/bin/python" ]]; then
+    PYTHON_BIN="$VIRTUAL_ENV/bin/python"
+  elif command -v python3 >/dev/null 2>&1; then
+    PYTHON_BIN="$(command -v python3)"
+  elif command -v python >/dev/null 2>&1; then
+    PYTHON_BIN="$(command -v python)"
+  else
+    echo "ERROR: could not find python3 or python. Create/activate a virtual environment first." >&2
+    exit 1
+  fi
+fi
+export PYTHON_BIN
+
 echo "Using manifest: $MANIFEST"
 echo "Logs: $LOGDIR"
-echo "Python: $($PYTHON_BIN -c 'import sys; print(sys.executable)')"
+echo "Python: $PYTHON_BIN"
 
-n=0
+commands_read=0
 while IFS=$'\t' read -r figure_id command expected_outputs status notes; do
-  # Skip header and empty rows.
-  [[ "${figure_id:-}" == "figure_id" ]] && continue
   [[ -z "${figure_id:-}" ]] && continue
+  [[ "$figure_id" == "figure_id" ]] && continue
+  commands_read=$((commands_read + 1))
 
   if [[ "$command" == "TODO" ]]; then
     if [[ "$SKIP_TODO" -eq 1 ]]; then
       echo "SKIP $figure_id: TODO command not filled in."
       continue
+    else
+      echo "ERROR: $figure_id still has TODO command. Edit commands.tsv or run ./run_all.sh --skip-todo." >&2
+      exit 1
     fi
-    echo "ERROR: $figure_id still has TODO command. Edit commands.tsv or run ./run_all.sh --skip-todo." >&2
-    exit 1
   fi
 
   echo ""
@@ -59,16 +64,13 @@ while IFS=$'\t' read -r figure_id command expected_outputs status notes; do
   echo "$command"
 
   if [[ "$DRY_RUN" -eq 0 ]]; then
-    log="$LOGDIR/${figure_id}.log"
-    # Use bash -c, not bash -lc, so we do not reset the activated virtual-environment PATH.
-    if ! bash -c "$command" > "$log" 2>&1; then
-      echo "ERROR: command failed for $figure_id. See $log" >&2
-      echo "----- tail of $log -----" >&2
-      tail -80 "$log" >&2 || true
+    if ! bash -c "$command" > "$LOGDIR/${figure_id}.log" 2>&1; then
+      echo "ERROR: command failed for $figure_id. See $LOGDIR/${figure_id}.log" >&2
+      echo "----- tail of $LOGDIR/${figure_id}.log -----" >&2
+      tail -40 "$LOGDIR/${figure_id}.log" >&2 || true
       exit 1
     fi
   fi
-  n=$((n + 1))
 done < "$MANIFEST"
 
 if [[ "$DRY_RUN" -eq 0 ]]; then
@@ -77,5 +79,5 @@ if [[ "$DRY_RUN" -eq 0 ]]; then
   echo "Done. Checksums written to $LOGDIR/output_checksums.tsv"
 else
   echo ""
-  echo "Dry run complete. No commands executed. Commands read: $n"
+  echo "Dry run complete. No commands executed. Commands read: $commands_read"
 fi

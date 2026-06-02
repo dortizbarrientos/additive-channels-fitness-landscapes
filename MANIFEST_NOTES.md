@@ -1,34 +1,11 @@
-# Notes for the reviewer-facing repository
+# Manifest notes
 
-The current working directory contains at least three conceptual branches: the GENETICS/Additive Channels manuscript, PNAS dynamics material, and older or parallel figure histories. The reviewer-facing repository should not expose that history as an archaeological task.
+The repository is organised as a minimal reproducibility package for the GENETICS/Additive Channels manuscript figures.
 
-A clean final structure should look like this:
+`commands.tsv` is the executable manifest used by `run_all.sh`. Each row gives a figure identifier, the command used to reproduce or verify the output, the expected output path, a status tag, and a short note.
 
-```text
-additive-channels-genetics/
-  README.md
-  run_all.sh
-  commands.tsv
-  main_paper_with_page_lines.tex
-  additiveChannels/
-    figures/
-      figure1_channel.pdf
-      figure2_validation.pdf
-      figure3_framework.pdf
-      figure4_trajectory.pdf
-      figure5_natural_vs_breeding.pdf
-      multiseed_4trait_moving.png
-      cv_4trait_moving.png
-      geom_invariants_4trait_moving.png
-    code/
-      figure1_channel/
-      figure2_validation/
-      figure3_framework/
-      figure4_trajectory/
-      figure5_natural_vs_breeding/
-      appendix_s5_simulation/
-    data/
-      appendix_s5_cached_replicates/
-```
+`figure_manifest.tsv` is a compact human-readable map from manuscript figure items to final outputs and source/provenance notes.
 
-For each figure, record whether it is regenerated from raw code, regenerated from cached stochastic simulation output, or copied from an editable composition file after script-generated panels are created. That distinction is fine, but it should be explicit.
+`FIGURE_PROVENANCE.md` gives the longer figure-by-figure explanation, including the older internal numbering retained by some source-code folders.
+
+The directories `_repro_work/`, `_repro_outputs/`, and `_repro_logs/` are created during local reproduction and are intentionally ignored by Git.

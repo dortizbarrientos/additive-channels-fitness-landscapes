@@ -1,0 +1,21 @@
+# Keep text files portable across macOS/Linux/Windows.
+*.md text eol=lf
+*.txt text eol=lf
+*.tsv text eol=lf
+*.csv text eol=lf
+*.py text eol=lf
+*.sh text eol=lf
+*.tex text eol=lf
+*.bib text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Treat generated scientific outputs as binary.
+*.pdf binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.eps binary
+*.pptx binary
+*.docx binary
+*.zip binary

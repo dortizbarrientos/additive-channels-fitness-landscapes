@@ -1,9 +1,9 @@
-figure_id	tex_line	final_output	source	status
-F1	408	revision/tex/additiveChannels/additiveChannels/figures/figure1_channel.pdf	curated final PDF	CURATED_FINAL_OUTPUT
-F2	591	revision/tex/additiveChannels/additiveChannels/figures/figure2_validation.pdf	revision/figures/figure2/figure2_validation.py	REPRODUCED_FROM_CODE
-F3	692	revision/tex/additiveChannels/additiveChannels/figures/figure3_framework.pdf	curated final PDF	CURATED_FINAL_OUTPUT
-F4	826	revision/tex/additiveChannels/additiveChannels/figures/figure4_trajectory.pdf	revision/figures/figure3/figure3_trajectory.py	REPRODUCED_FROM_CODE_RENAMED
-F5	854	revision/tex/additiveChannels/additiveChannels/figures/figure5_natural_vs_breeding.pdf	revision/figures/figure4/figure4_natural_vs_breeding.py	REPRODUCED_FROM_CODE_RENAMED
-S5.1	1384	revision/tex/additiveChannels/additiveChannels/figures/multiseed_4trait_moving.png	curated final simulation output	CURATED_FINAL_SIM_OUTPUT
-S5.2	1403	revision/tex/additiveChannels/additiveChannels/figures/cv_4trait_moving.png	curated final simulation output	CURATED_FINAL_SIM_OUTPUT
-S5.3	1432	revision/tex/additiveChannels/additiveChannels/figures/geom_invariants_4trait_moving.png	curated final simulation output	CURATED_FINAL_SIM_OUTPUT
+figure_id	tex_line	final_manuscript_output	reproduced_or_checked_output	source	status
+F1	408	revision/tex/additiveChannels/additiveChannels/figures/figure1_channel.pdf	revision/tex/additiveChannels/additiveChannels/figures/figure1_channel.pdf	curated final PDF	CURATED_FINAL_OUTPUT
+F2	591	revision/tex/additiveChannels/additiveChannels/figures/figure2_validation.pdf	_repro_outputs/figure2_validation.pdf	revision/figures/figure2/figure2_validation.py	REPRODUCED_FROM_CODE
+F3	692	revision/tex/additiveChannels/additiveChannels/figures/figure3_framework.pdf	revision/tex/additiveChannels/additiveChannels/figures/figure3_framework.pdf	curated final PDF	CURATED_FINAL_OUTPUT
+F4	826	revision/tex/additiveChannels/additiveChannels/figures/figure4_trajectory.pdf	_repro_outputs/figure4_trajectory.pdf	revision/figures/figure3/figure3_trajectory.py	REPRODUCED_FROM_CODE_RENAMED
+F5	854	revision/tex/additiveChannels/additiveChannels/figures/figure5_natural_vs_breeding.pdf	_repro_outputs/figure5_natural_vs_breeding.pdf	revision/figures/figure4/figure4_natural_vs_breeding.py	REPRODUCED_FROM_CODE_RENAMED
+S5.1	1384	revision/tex/additiveChannels/additiveChannels/figures/multiseed_4trait_moving.png	revision/tex/additiveChannels/additiveChannels/figures/multiseed_4trait_moving.png	curated final simulation output	CURATED_FINAL_SIM_OUTPUT
+S5.2	1403	revision/tex/additiveChannels/additiveChannels/figures/cv_4trait_moving.png	revision/tex/additiveChannels/additiveChannels/figures/cv_4trait_moving.png	curated final simulation output	CURATED_FINAL_SIM_OUTPUT
+S5.3	1432	revision/tex/additiveChannels/additiveChannels/figures/geom_invariants_4trait_moving.png	revision/tex/additiveChannels/additiveChannels/figures/geom_invariants_4trait_moving.png	curated final simulation output	CURATED_FINAL_SIM_OUTPUT
