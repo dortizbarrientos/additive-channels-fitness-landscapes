@@ -3,17 +3,15 @@
 **Additive Channels in Curved Fitness Landscapes**  
 Daniel Ortiz-Barrientos and Mark Cooper
 
-This repository provides the reviewer-facing reproducibility package for the manuscript. It is intentionally small: it keeps the final manuscript figure files, the code bundles needed to regenerate the code-generated figures, and a manifest-based runner that checks all expected outputs.
-
-The repository is not the full development archive for the broader additive-channels project. It is a focused package for inspecting the final figure set and rerunning the figure-generation code that is retained here.
+This repository is a lightweight reproducibility package that includes final figures, the code used to generate them, and a runner to verify the results.
 
 ## Reproducibility scope
 
 The package supports two levels of reproducibility.
 
-First, it regenerates the figures for which the final code bundles are included in this repository: final Figure 2, final Figure 4, and final Figure 5. These regenerated files are written to `_repro_outputs/` so that a successful run does not overwrite the tracked manuscript figures.
+First, it regenerates the figures whose final code bundles are included in this repository: final Figure 2, final Figure 4, and final Figure 5. These regenerated files are written to `_repro_outputs/` so that a successful run does not overwrite the tracked manuscript figures.
 
-Second, it verifies that all final manuscript figure files are present and records their checksums. This includes the curated schematic outputs and the Appendix S5 simulation/diagnostic outputs for which the final figure files are retained but the full original generation pipeline is not included in this minimal repository.
+Second, it verifies that all final manuscript figure files are present and records their checksums. This includes the curated schematic outputs and the Appendix S5 simulation/diagnostic outputs for which the final figure files are retained.
 
 For the figure-by-figure mapping, see [`FIGURE_PROVENANCE.md`](FIGURE_PROVENANCE.md).
 
