@@ -44,7 +44,7 @@ toSubmit/main_paper_with_page_lines.tex
 toSubmit/main_paper_with_page_lines.pdf
 ````
 
-The folders `revision/figures/figure3/` and `revision/figures/figure4/` retain their older internal names from the revision history. In the final manuscript, these correspond to Figure 4 and Figure 5, respectively. This mapping is made explicit in `commands.tsv`, `figure_manifest.tsv`, and `FIGURE_PROVENANCE.md`.
+The folders `revision/figures/figure3/` and `revision/figures/figure4/` retain their older internal names from the revision history. In the final manuscript, these correspond to Figure 4 and Figure 5, respectively. This mapping is made explicit in `commands.tsv`, `figure_manifest.tsv`, and `FIGURE_PROVENANCE.md`. The directory name `revision/` is retained from the manuscript revision history. In this minimal repository it contains only the retained figure-generation bundles and final manuscript figure outputs used by the reproducibility runner.
 
 ## Quick start
 
