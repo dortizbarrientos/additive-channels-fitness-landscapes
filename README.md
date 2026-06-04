@@ -1,54 +1,44 @@
-**Additive Channels in Curved Fitness Landscapes**  
+# Additive Channels in Curved Fitness Landscapes
+
 Daniel Ortiz-Barrientos and Mark Cooper
 
-This repository is a lightweight reproducibility package that includes final figures, the code used to generate them, and a runner to verify the results.
+Reproducibility package for the manuscript *Additive Channels in Curved Fitness
+Landscapes* (GENETICS). It contains the final manuscript figures, the code that
+generates them, the SLiM validation behind Appendix S5, and a single runner that
+reproduces and verifies the results.
 
-## Reproducibility scope
+The central object of the paper is the **additivity index**
 
-The package supports two levels of reproducibility.
+```
+A_g = V_lin / (V_lin + V_quad),
+```
 
-First, it regenerates the figures whose final code bundles are included in this repository: final Figure 2, final Figure 4, and final Figure 5. These regenerated files are written to `_repro_outputs/` so that a successful run does not overwrite the tracked manuscript figures.
+the fraction of log-fitness variance carried by the locally linear part of a
+curved fitness surface. Appendix S5 confirms, in forward-time simulation, that
+this analytical quantity equals the empirical fraction of fitness variance an
+additive predictor explains: `A_g = R^2`.
 
-Second, it verifies that all final manuscript figure files are present and records their checksums. This includes the curated schematic outputs and the Appendix S5 simulation/diagnostic outputs for which the final figure files are retained.
+---
 
-For the figure-by-figure mapping, see [`FIGURE_PROVENANCE.md`](FIGURE_PROVENANCE.md).
+## Reproducibility at three levels
 
-## Repository contents
+| Tier | What it covers | How it is reproduced | Needs SLiM? |
+| --- | --- | --- | --- |
+| 1. Code-generated figures | Figures 2, 4, 5 | regenerated from Python into `_repro_outputs/` | no |
+| 2. Curated figures | Figures 1, 3 | verified present, checksummed in place | no |
+| 3. Appendix S5 validation | `multiseed`, `cv`, `geom_invariants` | regenerated from SLiM, or rebuilt from tracked diagnostics | optional |
 
-```text
-README.md
-MANIFEST_NOTES.md
-FIGURE_PROVENANCE.md
-LICENSE
-requirements.txt
-run_all.sh
-verify_outputs.py
-commands.tsv
-figure_manifest.tsv
+Tiers 1 and 2 run from the repository root. Tier 3 lives in a self-contained
+bundle under `toSubmit/additiveChannels/slim/` and can be reproduced two ways:
+fully from SLiM, or — without installing SLiM — from the per-replicate
+diagnostic files that are tracked in this repository.
 
-revision/figures/figure2/       # source bundle for final Figure 2
-revision/figures/figure3/       # source bundle for final Figure 4; old internal name retained
-revision/figures/figure4/       # source bundle for final Figure 5; old internal name retained
+For the figure-by-figure mapping see
+[`FIGURE_PROVENANCE.md`](FIGURE_PROVENANCE.md).
 
-revision/tex/additiveChannels/additiveChannels/figures/
-    figure1_channel.pdf
-    figure2_validation.pdf
-    figure3_framework.pdf
-    figure4_trajectory.pdf
-    figure5_natural_vs_breeding.pdf
-    multiseed_4trait_moving.png
-    cv_4trait_moving.png
-    geom_invariants_4trait_moving.png
-
-toSubmit/main_paper_with_page_lines.tex
-toSubmit/main_paper_with_page_lines.pdf
-````
-
-The folders `revision/figures/figure3/` and `revision/figures/figure4/` retain their older internal names from the revision history. In the final manuscript, these correspond to Figure 4 and Figure 5, respectively. This mapping is made explicit in `commands.tsv`, `figure_manifest.tsv`, and `FIGURE_PROVENANCE.md`. The directory name `revision/` is retained from the manuscript revision history. In this minimal repository it contains only the retained figure-generation bundles and final manuscript figure outputs used by the reproducibility runner.
+---
 
 ## Quick start
-
-From a fresh clone:
 
 ```bash
 git clone https://github.com/dortizbarrientos/additive-channels-fitness-landscapes.git
@@ -62,73 +52,185 @@ python -m pip install -r requirements.txt
 ./run_all.sh
 ```
 
-A successful run writes logs and checksums to:
+`./run_all.sh` regenerates the code-based main figures, verifies that every
+final figure file is present, and writes a checksum log. It does **not** require
+SLiM, and it does not overwrite the tracked manuscript figures: regenerated
+files go to `_repro_outputs/`, and a checksum log to
+`_repro_logs/output_checksums.tsv`.
 
-```text
-_repro_logs/output_checksums.tsv
+To also reproduce the Appendix S5 simulation (requires SLiM, see below):
+
+```bash
+./run_all.sh --with-sim
 ```
 
-and writes regenerated code-based figures to:
-
-```text
-_repro_outputs/
-```
-
-Both folders are local run products and are ignored by Git.
-
-## Expected output behaviour
-
-The final manuscript figures are tracked under:
-
-```text
-revision/tex/additiveChannels/additiveChannels/figures/
-```
-
-The runner does not overwrite the tracked final manuscript PDFs for the code-generated figures. Instead, it regenerates those figures into `_repro_outputs/` and verifies the expected outputs listed in `commands.tsv`. This keeps the working tree clean after a successful run and avoids unnecessary PDF checksum changes caused by metadata, font embedding, or save-time differences.
-
-After running:
+After any run, the working tree should stay clean:
 
 ```bash
 ./run_all.sh
-git status --short
+git status --short        # should report no modified tracked figures
 ```
 
-`git status --short` should not report modified tracked figure files. Local folders such as `.venv/`, `_repro_logs/`, `_repro_work/`, and `_repro_outputs/` are expected and ignored.
+Local folders `.venv/`, `_repro_logs/`, `_repro_work/`, and `_repro_outputs/`
+are run products and are ignored by Git.
+
+---
+
+## Appendix S5: the SLiM validation
+
+The bundle at `toSubmit/additiveChannels/slim/` reproduces the three Appendix S5
+figures and the numerical summary they rest on. The model is a forward-time,
+individual-based SLiM simulation: a diploid population of `N = 2000`, four traits
+with 50 QTL each (200 QTL total), under a fitness optimum that drifts along
+trait 1 for 40 generations and then holds, run for 200 generations across **20
+stochastic replicates** with seeds `42..61`. Each replicate's per-generation
+diagnostics record `V_lin`, `V_quad`, `A_g`, the empirical `R^2`, and the
+eigenvalue structure of **G** and of **ΓG**.
+
+### Running it
+
+```bash
+cd toSubmit/additiveChannels/slim
+
+# Full reproduction from SLiM (auto-detects cores; see Parallelism).
+./reproduce_appendix_s5.sh
+
+# SLiM-free: rebuild the figures and summary from the tracked diagnostic CSVs.
+./reproduce_appendix_s5.sh --skip-slim
+
+# Fast smoke test: two replicates only (not the manuscript result).
+./reproduce_appendix_s5.sh --clean --quick
+```
+
+The driver writes its figures to `slim/figures/` and its summary to
+`slim/output/appendix_s5_summary.csv`. The curated manuscript copies of the S5
+figures are tracked separately and are not overwritten.
+
+### What "reproduced" means here
+
+The figures are stochastic SLiM output, and PNG/PDF bytes are not reproducible
+across library versions or platforms — so byte-equality is the wrong test.
+Instead, the driver asserts the two identities the appendix actually claims:
+
+- the across-replicate median `|A_g − R^2|` stays near the reported value
+  (≈ 0.013), and
+- the algebraic identity `2·V_quad = Σ μ_i²` holds to numerical precision.
+
+A run that violates either is reported as a failure rather than silently
+producing a misleading figure.
+
+### Parallelism
+
+The replicate phase is embarrassingly parallel: each replicate is an independent
+SLiM process with a fixed seed, so results are identical for any number of
+workers. The driver runs them through a pool.
+
+```bash
+./reproduce_appendix_s5.sh -j 20      # 20 workers
+JOBS=16 ./reproduce_appendix_s5.sh    # same, via environment
+```
+
+By default the driver uses `cores − 2` workers, capped at the replicate count.
+Each worker is pinned to a single math thread (`VECLIB_MAXIMUM_THREADS=1` and
+the BLAS/OpenMP equivalents) to prevent oversubscription when many replicates
+run at once.
+
+### Software
+
+Simulations were run in **SLiM 5.2** (Haller, Ralph & Messer 2026; see
+[messerlab.org/slim](https://messerlab.org/slim)). The diagnostic and figure
+scripts require Python 3 with `numpy`, `pandas`, and `matplotlib`
+(`slim/requirements.txt`). The simulation design is documented in
+`slim/SIMULATION_DESIGN.md`.
+
+### Data policy
+
+The per-replicate **diagnostic** CSVs (`output/rep_*_diag.csv`) and the summary
+(`output/appendix_s5_summary.csv`) are tracked, so the figures can be rebuilt
+without SLiM. The heavy raw breeding-value and optimum dumps
+(`output/rep_*_bv.csv`, `output/rep_*_opt.csv`), along with `logs/` and
+`figures/`, are regenerable and are not tracked; the full raw set is deposited
+in the archival release (see Citation).
+
+---
 
 ## Figure map
 
-| Manuscript item | Final manuscript output                                                                    | Code-generated or checked output                 | Provenance status                                                                                                      |
-| --------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------- |
-| Figure 1        | `revision/tex/additiveChannels/additiveChannels/figures/figure1_channel.pdf`               | checked in place                                 | curated final output                                                                                                   |
-| Figure 2        | `revision/tex/additiveChannels/additiveChannels/figures/figure2_validation.pdf`            | `_repro_outputs/figure2_validation.pdf`          | regenerated from `revision/figures/figure2/figure2_validation.py`                                                      |
-| Figure 3        | `revision/tex/additiveChannels/additiveChannels/figures/figure3_framework.pdf`             | checked in place                                 | curated final output                                                                                                   |
-| Figure 4        | `revision/tex/additiveChannels/additiveChannels/figures/figure4_trajectory.pdf`            | `_repro_outputs/figure4_trajectory.pdf`          | regenerated from `revision/figures/figure3/figure3_trajectory.py` and written under the final manuscript name          |
-| Figure 5        | `revision/tex/additiveChannels/additiveChannels/figures/figure5_natural_vs_breeding.pdf`   | `_repro_outputs/figure5_natural_vs_breeding.pdf` | regenerated from `revision/figures/figure4/figure4_natural_vs_breeding.py` and written under the final manuscript name |
-| Appendix S5.1   | `revision/tex/additiveChannels/additiveChannels/figures/multiseed_4trait_moving.png`       | checked in place                                 | curated final simulation output                                                                                        |
-| Appendix S5.2   | `revision/tex/additiveChannels/additiveChannels/figures/cv_4trait_moving.png`              | checked in place                                 | curated final simulation output                                                                                        |
-| Appendix S5.3   | `revision/tex/additiveChannels/additiveChannels/figures/geom_invariants_4trait_moving.png` | checked in place                                 | curated final simulation output                                                                                        |
+| Manuscript item | Tracked final output | Reproduced / checked output | Provenance |
+| --- | --- | --- | --- |
+| Figure 1 | `revision/tex/.../figures/figure1_channel.pdf` | checked in place | curated final |
+| Figure 2 | `revision/tex/.../figures/figure2_validation.pdf` | `_repro_outputs/figure2_validation.pdf` | from `revision/figures/figure2/figure2_validation.py` |
+| Figure 3 | `revision/tex/.../figures/figure3_framework.pdf` | checked in place | curated final |
+| Figure 4 | `revision/tex/.../figures/figure4_trajectory.pdf` | `_repro_outputs/figure4_trajectory.pdf` | from `revision/figures/figure3/figure3_trajectory.py` |
+| Figure 5 | `revision/tex/.../figures/figure5_natural_vs_breeding.pdf` | `_repro_outputs/figure5_natural_vs_breeding.pdf` | from `revision/figures/figure4/figure4_natural_vs_breeding.py` |
+| Appendix S5.1 | `revision/tex/.../figures/multiseed_4trait_moving.png` | `slim/figures/multiseed_4trait_moving.png` | SLiM (Tier 3); curated PNG tracked |
+| Appendix S5.2 | `revision/tex/.../figures/cv_4trait_moving.png` | `slim/figures/cv_4trait_moving.png` | SLiM (Tier 3); curated PNG tracked |
+| Appendix S5.3 | `revision/tex/.../figures/geom_invariants_4trait_moving.png` | `slim/figures/geom_invariants_4trait_moving.png` | SLiM (Tier 3); curated PNG tracked |
+
+Paths above abbreviate `revision/tex/additiveChannels/additiveChannels/figures/`.
+The directories `revision/figures/figure3/` and `figure4/` retain their older
+internal names; in the final manuscript they correspond to Figures 4 and 5. This
+mapping is explicit in `commands.tsv`, `figure_manifest.tsv`, and
+`FIGURE_PROVENANCE.md`.
+
+---
+
+## Repository layout
+
+```text
+run_all.sh                     # top-level runner (Tiers 1–2; --with-sim adds Tier 3)
+verify_outputs.py              # existence + SHA-256 checksum verifier
+commands.tsv                   # execution manifest read by run_all.sh
+figure_manifest.tsv            # compact figure index
+FIGURE_PROVENANCE.md           # detailed figure-by-figure provenance
+MANIFEST_NOTES.md  LICENSE  requirements.txt
+
+revision/figures/figure2|3|4/  # source bundles for Figures 2, 4, 5
+revision/tex/.../figures/      # tracked final manuscript figures (all 5 + 3 S5 PNGs)
+
+toSubmit/additiveChannels/
+    text/                      # manuscript .tex/.pdf, references, response to reviewers
+    figures/  tables/          # submission figures and data tables
+    slim/                      # Appendix S5 SLiM validation bundle (Tier 3)
+        reproduce_appendix_s5.sh   # the S5 reproduction driver
+        slim_sim_n_traits.slim     # SLiM 5.2 source
+        compute_diagnostics.py     # per-replicate diagnostics
+        make_appendix_s5_figures.py# aggregation + figures + summary
+        SIMULATION_DESIGN.md  requirements.txt  README.md
+        output/                    # *_diag.csv + summary tracked; *_bv/_opt ignored
+```
+
+---
 
 ## Manifest files
 
-`commands.tsv` is the execution manifest read by `run_all.sh`. Each row contains one figure item, one shell command, the expected output path, the provenance status, and a short note.
+`commands.tsv` is the execution manifest: one row per figure item, with the
+shell command, expected output path, provenance status, and a note.
+`figure_manifest.tsv` is a compact index linking figure labels to output paths.
+`verify_outputs.py` checks that expected outputs exist and records sizes and
+SHA-256 checksums. `FIGURE_PROVENANCE.md` gives the long-form provenance.
 
-`figure_manifest.tsv` is a compact figure index linking manuscript figure labels to final output paths and provenance status.
-
-`FIGURE_PROVENANCE.md` gives the more detailed explanation of how each final manuscript output relates to the retained source code or curated final output.
-
-`verify_outputs.py` checks that the expected outputs exist and records file sizes and SHA-256 checksums.
+---
 
 ## Troubleshooting
 
-If macOS or Homebrew reports an “externally managed environment” error during installation, use the virtual-environment commands above rather than installing packages into the system Python.
+If `pip` reports an "externally managed environment" error, use the
+virtual-environment commands in Quick start rather than the system Python.
 
-If the runner is not executable, run:
+If a runner is not executable:
 
 ```bash
 chmod +x run_all.sh verify_outputs.py
+chmod +x toSubmit/additiveChannels/slim/reproduce_appendix_s5.sh
 ```
 
-If a successful run leaves tracked PDFs marked as modified, check that `commands.tsv` writes regenerated outputs to `_repro_outputs/` rather than directly into the tracked manuscript figure folder. To restore tracked manuscript figures to the committed versions, use:
+If `./run_all.sh --with-sim` reports that SLiM is not found, install SLiM ≥ 5.2
+and ensure `slim` is on your `PATH`, or point the driver at it with
+`SLIM_BIN=/path/to/slim`.
+
+If a successful run leaves tracked PDFs marked modified, confirm `commands.tsv`
+writes regenerated outputs to `_repro_outputs/` rather than into the tracked
+figure folder. To restore tracked figures to their committed versions:
 
 ```bash
 git restore revision/tex/additiveChannels/additiveChannels/figures/figure2_validation.pdf \
@@ -136,10 +238,18 @@ git restore revision/tex/additiveChannels/additiveChannels/figures/figure2_valid
             revision/tex/additiveChannels/additiveChannels/figures/figure5_natural_vs_breeding.pdf
 ```
 
+---
+
 ## Licence
 
-See [`LICENSE`](LICENSE) for the licence terms.
+See [`LICENSE`](LICENSE).
+
+---
 
 ## Citation
 
-Please cite the associated manuscript and this repository when using or adapting the code or figures. A full citation can be added here after publication.
+Please cite the associated manuscript and this repository when using or adapting
+the code or figures; a full citation will be added on publication, with an
+archival DOI for the tagged release (and the full raw simulation outputs)
+deposited at that time. The simulations use SLiM 5.2 (Haller, Ralph & Messer,
+*Molecular Biology and Evolution* 43(1):msaf313, 2026).
