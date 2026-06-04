@@ -1,0 +1,231 @@
+// =========================================================================
+// slim_sim.slim
+//
+// SLiM 5.2 simulation for "Additive Channels in Curved Fitness Landscapes"
+// (Ortiz-Barrientos & Cooper, GENETICS-2026-309068)
+//
+// PURPOSE:
+//   Validate the framework's central claim that, under Gaussian closure, the
+//   analytical additivity index A_g (computed from the population's empirical
+//   genetic covariance G and the analytical local geometry b, H) predicts the
+//   empirical R^2 between the linear-only predictor L_i = b^T (a_i - a_bar)
+//   and the full log-fitness l_i = log W(a_i) across the population.
+//
+// MODEL:
+//   * 2 quantitative traits, biallelic additive G->P map.
+//   * 100 QTL loci total: 50 affect trait 1, 50 affect trait 2.
+//   * Free recombination between all loci (rate 0.5).
+//   * Diploid, sexually reproducing Wright-Fisher population.
+//   * Mutation rate 0: variation is from initial standing polymorphism only.
+//   * Anisotropic Gaussian quadratic stabilising fitness:
+//       W(z) = exp(-0.5 * [gamma_1 (z_1 - z*_1)^2 + gamma_2 (z_2 - z*_2)^2])
+//
+// CONDITION (proof of concept = weak selection, sustained pressure):
+//   * N = 2000, gamma_1 = 0.10, gamma_2 = 0.05
+//   * Optimum z* = (-2, 0)
+//   * Initial population mean BV at (0, 0) by construction (centred effects),
+//     so initial displacement from optimum is exactly 2 along trait 1.
+//   * 200 generations
+//
+// OUTPUT:
+//   CSV at OUTPUT_PATH with columns: generation, individual, a1, a2.
+//   For N=2000 x 200 generations: 400,000 rows + header.
+//
+// USAGE:
+//   slim -d "OUTPUT_PATH='output/rep_01_weak_sustained.csv'" \
+//        -d "SEED=42" \
+//        slim_sim.slim
+//
+// CHANGES FROM v2:
+//   * Allele effects are now CENTRED per trait before placement, so that
+//     sum(eff1) = 0 and sum(eff2) = 0 exactly.  At HWE allele frequency 0.5,
+//     this guarantees initial population mean BV = (0, 0).  Without this,
+//     the realised sum of 50 random effects has SD = sigma * sqrt(50),
+//     which can place the population's initial mean tens of standard
+//     deviations from origin -- as happened in v2 (a_bar_1 = -2.17,
+//     coincidentally on top of the optimum).
+//   * Centring reduces effective per-locus variance by (n-1)/n = 49/50,
+//     a 2% adjustment with no qualitative effect.
+//
+// =========================================================================
+
+initialize()
+{
+    // -------------------------------------------------------------
+    //  PARAMETERS
+    // -------------------------------------------------------------
+    
+    if (!exists("SEED"))
+        defineConstant("SEED", 42);
+    setSeed(SEED);
+    
+    if (!exists("OUTPUT_PATH"))
+        defineConstant("OUTPUT_PATH", "output/rep_default.csv");
+    
+    defineConstant("N", 2000);            // population size
+    defineConstant("GENS", 200);          // total generations to simulate
+    defineConstant("L_PER_TRAIT", 50);    // QTL loci per trait
+    defineConstant("N_LOCI", 100);        // total QTL loci
+    
+    defineConstant("SIGMA_1", 0.346);     // sqrt(3/25): per-locus SD trait 1
+    defineConstant("SIGMA_2", 0.200);     // sqrt(1/25): per-locus SD trait 2
+    
+    defineConstant("GAMMA_1", 0.10);      // anisotropic stabilising selection
+    defineConstant("GAMMA_2", 0.05);
+    
+    defineConstant("Z_OPT_1", -2.0);      // optimum: pop displaced by 2 on trait 1
+    defineConstant("Z_OPT_2",  0.0);
+    
+    // -------------------------------------------------------------
+    //  GENOMIC SETUP
+    // -------------------------------------------------------------
+    
+    initializeMutationType("m1", 0.5, "f", 0.0);
+    m1.convertToSubstitution = F;        // keep fixed mutations in the seg set
+    
+    initializeGenomicElementType("g1", m1, 1.0);
+    initializeGenomicElement(g1, 0, N_LOCI - 1);
+    
+    initializeMutationRate(0);
+    initializeRecombinationRate(0.5);
+}
+
+
+// =========================================================================
+//  TICK 1, EARLY: create the empty population
+// =========================================================================
+
+1 early()
+{
+    sim.addSubpop("p1", N);
+}
+
+
+// =========================================================================
+//  TICK 1, LATE: place QTLs and open the output file
+//
+//  Allele effects are drawn and CENTRED per trait, then placed on a random
+//  half of the haplosomes for each locus.  Centring guarantees the initial
+//  population mean BV is (0, 0) so the initial displacement from the
+//  optimum is exactly (2, 0), independent of the random seed.
+// =========================================================================
+
+1 late()
+{
+    haps = p1.haplosomes;
+    n_haps = length(haps);
+    
+    // ---- Draw and centre allele effects ----
+    // Draw L_PER_TRAIT effects per trait, then subtract the mean so that
+    // the sum is zero.  At allele frequency 0.5, sum(eff) = 0 implies
+    // population mean BV = 0 for that trait.
+    eff1_all = rnorm(L_PER_TRAIT, 0, SIGMA_1);
+    eff1_all = eff1_all - mean(eff1_all);   // centre
+    
+    eff2_all = rnorm(L_PER_TRAIT, 0, SIGMA_2);
+    eff2_all = eff2_all - mean(eff2_all);   // centre
+    
+    // ---- Place QTLs at the 100 fixed positions ----
+    for (i in seqLen(N_LOCI))
+    {
+        // Trait assignment by position: first 50 -> trait 1, next 50 -> trait 2
+        if (i < L_PER_TRAIT)
+        {
+            eff1 = eff1_all[i];
+            eff2 = 0.0;
+        }
+        else
+        {
+            eff1 = 0.0;
+            eff2 = eff2_all[i - L_PER_TRAIT];
+        }
+        
+        // addNewDrawnMutation on a vector of haplosomes returns ONE Mutation
+        // object placed on all of them -- the standard QTL "shared allele"
+        // pattern.  Half the haplosomes carry the mutation, giving allele
+        // frequency exactly 0.5.
+        target = sample(haps, asInteger(n_haps * 0.5));
+        new_mut = target.addNewDrawnMutation(m1, i);
+        new_mut.setValue("eff1", eff1);
+        new_mut.setValue("eff2", eff2);
+    }
+    
+    // Open the output file: header only, overwrites any prior run's file.
+    writeFile(OUTPUT_PATH, "generation,individual,a1,a2");
+    
+    catn("Initial population: " + N + " diploids, " + N_LOCI + " QTLs");
+    catn("Per-locus effect SDs: trait 1 = " + SIGMA_1 + ", trait 2 = " + SIGMA_2);
+    catn("Trait-1 effects centred (sum = " + sum(eff1_all) + ")");
+    catn("Trait-2 effects centred (sum = " + sum(eff2_all) + ")");
+    catn("Stabilising selection: gamma_1 = " + GAMMA_1 + ", gamma_2 = " + GAMMA_2);
+    catn("Optimum z* = (" + Z_OPT_1 + ", " + Z_OPT_2 + ")");
+    catn("Output: " + OUTPUT_PATH);
+}
+
+
+// =========================================================================
+//  PER-INDIVIDUAL FITNESS
+//
+//  Anisotropic Gaussian quadratic stabilising selection.
+//  Phenotype = breeding value (E = 0 for this PoC).
+// =========================================================================
+
+fitnessEffect()
+{
+    muts = individual.haplosomes.mutations;
+    z1 = sum(muts.getValue("eff1"));
+    z2 = sum(muts.getValue("eff2"));
+    
+    dx = z1 - Z_OPT_1;
+    dy = z2 - Z_OPT_2;
+    
+    return exp(-0.5 * (GAMMA_1 * dx * dx + GAMMA_2 * dy * dy));
+}
+
+
+// =========================================================================
+//  LOG BREEDING VALUES EACH GENERATION
+//
+//  Build CSV lines via an explicit for loop using "+" concatenation.
+//  Eidos's paste0() collapses vector arguments to a single string instead
+//  of broadcasting element-wise as R's paste0 does.  The "+" operator on
+//  (number + string) coerces the number to a string -- guaranteed
+//  element-wise.
+// =========================================================================
+
+1: late()
+{
+    inds = p1.individuals;
+    n = length(inds);
+    gen = sim.cycle;
+    
+    // Compute BVs for all individuals
+    z1_vec = float(n);
+    z2_vec = float(n);
+    for (i in seqLen(n))
+    {
+        muts = inds[i].haplosomes.mutations;
+        z1_vec[i] = sum(muts.getValue("eff1"));
+        z2_vec[i] = sum(muts.getValue("eff2"));
+    }
+    
+    // Build n CSV lines, one per individual
+    lines = string(n);
+    for (i in seqLen(n))
+    {
+        lines[i] = gen + "," + i + "," + z1_vec[i] + "," + z2_vec[i];
+    }
+    
+    writeFile(OUTPUT_PATH, lines, append=T);
+}
+
+
+// =========================================================================
+//  STOP AT GENS
+// =========================================================================
+
+GENS late()
+{
+    catn("Done: " + GENS + " generations completed.");
+    sim.simulationFinished();
+}

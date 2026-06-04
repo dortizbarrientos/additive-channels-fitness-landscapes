@@ -1,0 +1,631 @@
+% =====================================================================
+%  Response to Reviewers — GENETICS-2026-309068
+%  "Additive Channels in Curved Fitness Landscapes"
+%  Daniel Ortiz-Barrientos and Mark Cooper
+% =====================================================================
+
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[a4paper, margin=2.5cm]{geometry}
+\usepackage{xcolor}
+\usepackage[most,breakable]{tcolorbox}
+\tcbuselibrary{breakable}
+\usepackage{amsmath, amssymb, bm}
+\usepackage{xspace}
+\usepackage{microtype}
+\usepackage{enumitem}
+\usepackage{hyperref}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor={blue!50!black},
+  urlcolor={blue!50!black},
+  citecolor={blue!50!black}
+}
+
+% --- Color palette ---
+\definecolor{ReviewerColor}{HTML}{2C3E50}     % muted dark blue-grey for quotes
+\definecolor{EditorColor}{HTML}{6B5B95}        % muted purple for editor
+\definecolor{ResponseColor}{HTML}{1B5E20}      % muted forest green for responses
+\definecolor{ChangeColor}{HTML}{B71C1C}        % subdued red for change pointers
+\definecolor{QuoteBackground}{HTML}{F5F5F0}    % warm cream
+\definecolor{ResponseBackground}{HTML}{F0F4F0} % faint sage
+
+% --- Custom environments ---
+
+% Reviewer/editor verbatim quote box
+\newtcolorbox{revquote}[1][Reviewer]{
+  colback=QuoteBackground,
+  colframe=ReviewerColor,
+  boxrule=0.4pt,
+  arc=2pt,
+  left=10pt, right=10pt, top=8pt, bottom=8pt,
+  title={\textbf{#1}},
+  fonttitle=\small\itshape,
+  coltitle=ReviewerColor,
+  attach title to upper={ },
+  before upper={\itshape},
+  breakable
+}
+
+\newtcolorbox{edquote}[1][Editor]{
+  colback=QuoteBackground,
+  colframe=EditorColor,
+  boxrule=0.4pt,
+  arc=2pt,
+  left=10pt, right=10pt, top=8pt, bottom=8pt,
+  title={\textbf{#1}},
+  fonttitle=\small\itshape,
+  coltitle=EditorColor,
+  attach title to upper={ },
+  before upper={\itshape},
+  breakable
+}
+
+% Response heading
+\newcommand{\response}{%
+  \par\medskip\noindent\textbf{\color{ResponseColor}Response.}\quad\ignorespaces
+}
+
+% Change-location pointer
+\newcommand{\changesat}[1]{%
+  \par\smallskip\noindent\hangindent=1.5em\hangafter=1
+  \textbf{\color{ChangeColor}Changes:} \quad #1\par\medskip
+}
+
+% Section heading style
+\renewcommand{\thesection}{\arabic{section}}
+\renewcommand{\thesubsection}{\arabic{section}.\arabic{subsection}}
+
+% Use stock LaTeX section formatting (titlesec conflicts with hyperref+#)
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0pt}%
+  {3.5ex plus 1ex minus .2ex}{2.3ex plus .2ex}%
+  {\Large\bfseries\color{ReviewerColor}}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0pt}%
+  {3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}%
+  {\large\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0pt}%
+  {3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}%
+  {\normalsize\bfseries\itshape}}
+\makeatother
+
+\setlength{\parskip}{6pt}
+\setlength{\parindent}{0pt}
+
+% --- Math macros (matching the manuscript) ---
+\newcommand{\Ag}{\ensuremath{\mathcal{A}_{g}}\xspace}
+\newcommand{\Vlin}{\ensuremath{V_{\mathrm{lin}}}\xspace}
+\newcommand{\Vquad}{\ensuremath{V_{\mathrm{quad}}}\xspace}
+\newcommand{\mat}[1]{\ensuremath{\mathbf{#1}}}
+\newcommand{\vect}[1]{\ensuremath{\bm{#1}}}
+\newcommand{\keff}{\ensuremath{k_{\mathrm{eff}}}\xspace}
+\newcommand{\tr}{\ensuremath{\operatorname{tr}}\xspace}
+\newcommand{\Var}{\ensuremath{\operatorname{Var}}\xspace}
+\newcommand{\Cov}{\ensuremath{\operatorname{Cov}}\xspace}
+\newcommand{\E}{\ensuremath{\mathbb{E}}\xspace}
+
+\title{\vspace{-2em}Response to Reviewers \\[0.4em]
+\large GENETICS-2026-309068 \\[0.2em]
+\textit{Additive Channels in Curved Fitness Landscapes}}
+\author{Daniel Ortiz-Barrientos and Mark Cooper}
+\date{May 2026}
+
+\begin{document}
+
+\maketitle
+
+\vspace{-1em}
+
+%% ===================================================================
+%% Opening letter
+%% ===================================================================
+
+\noindent Dear Dr. Martin,
+
+\medskip
+
+We are grateful to you and to the two reviewers for the careful and constructive engagement with our manuscript. The reviews identified several genuine conceptual problems in the original framing, and we have used the revision to repair them rather than to gloss over them.
+
+The largest change is a rescoping of the framework. The original manuscript opened by invoking the genotype-to-phenotype map and then developed a theory operating at the breeding-value-to-fitness level. Both reviewers and you flagged this as a real conceptual blur, and we agree. The revised introduction explicitly distinguishes the two questions and states that the framework treats breeding values as primitives, leaving the genotype-to-trait map upstream and to be examined in dedicated future work. We have also added formal connections to the Lande--Arnold notation, made the regimes under which the equilibrium analysis applies explicit, derived the LD retention coefficient $\rho$ in three classical frameworks (responding to your specific request), and added a stochastic-simulation appendix that validates the central identity $\Ag = R^2$ across 20 forward-time replicates with explicit genomes and breeding values. The asexual \textit{E.~coli} worked example has been removed, and the new simulation appendix serves as the sexual, diploid, explicit-genome illustration you suggested.
+
+We have not yet shortened the manuscript to the extent your length comment suggested would be welcome. Our intention is to make a final length pass after the conceptual revisions are stable, so that what is cut is identified once the revised structure is in place rather than guessed at in advance. We flag this explicitly so that you can advise us if a more aggressive cut is required at this stage.
+
+What follows is a verbatim quotation of every comment from your decision letter and the two reviewer reports, each followed by a response and a precise pointer to the location in the revised manuscript where the relevant change can be inspected. The \textbf{Changes} lines now refer to the line-numbered revised manuscript by page and line range. When the change concerns a figure, table, removed section, or caption rather than numbered prose, we cite the relevant page and object because those elements are not line-numbered in the compiled PDF.
+
+\medskip
+
+\noindent Yours sincerely,
+
+\medskip
+
+\noindent Daniel Ortiz-Barrientos and Mark Cooper
+
+\vfill
+
+\noindent\rule{\textwidth}{0.4pt}
+
+\tableofcontents
+
+\newpage
+
+
+%% ===================================================================
+%% Editor's comments
+%% ===================================================================
+
+\section{Editor's comments (Dr.~Guillaume Martin)}
+
+\subsection{Overall framing: which map is being addressed?}
+
+\begin{edquote}[Editor — overall framing]
+One of them which is common to both reviewer is to clarify what map is considered here. By alluding to G-to-P map, indeed, one is lead to believe that we are going to deal with G to traits maps wherease the paper really tackles the G to fitness map. This may be only a matter of clarification of the scope, but it an important point.
+\end{edquote}
+
+\response
+We agree, and we have rescoped the manuscript accordingly. The introduction has been rewritten to distinguish three distinct mappings: the genotype-to-phenotype (G$\to$P) map, the genotype-to-fitness map, and the breeding-value-to-fitness map. We make explicit at the outset that the framework treats breeding values as primitives and analyses the local geometry of log-fitness over breeding-value space, leaving the upstream G$\to$P map as a separate question to be addressed in dedicated future work. We have also added a paragraph in the Discussion (\textit{Mechanistic versus statistical epistasis}) that engages with the literature on G$\to$P-map nonlinearities (Cheverud \& Routman 1995; Hansen 2006, 2013; Carter, Hermisson \& Hansen 2005; Rice 2002) and explicitly states the limitations of working at the BV-level rather than at the G$\to$P-map level. The Technow et al.\ (2021, 2026) work on $E(NK)$ generation of G$\to$P maps is now invoked in the Discussion as a complementary framework that the additive-channels diagnostic can be applied to in subsequent work.
+
+\changesat{Introduction, p.~1, lines~13--35 and p.~2, lines~1--39; Discussion subsection \textit{Mechanistic versus statistical epistasis}, p.~15, lines~67--122 and p.~16, lines~1--61; Appendix~S5, \textit{Synthesis and limitations}/scope, p.~25, line~28 through p.~26, line~13.}
+
+\subsection{\texorpdfstring{Variation of $\mat{H}$ over time}{Variation of H over time}}
+
+\begin{edquote}[Editor — variation of $\mat{H}$]
+The issue of changes in H over time (related to the first point) is also comon to both reviewers and requires particular care.
+\end{edquote}
+
+\response
+The framework is local and second-order. Where the manuscript invokes equilibrium properties of $\Ag$, this requires that $\mat{H}$ be approximately constant over the timescale of the analysis. We have added an explicit \textit{Scope of this equilibrium} paragraph immediately after Equation~(28) in the manuscript that states this is a conditional $\mat{G}$-equilibrium under a held or externally maintained $(\vect{b}, \mat{H})$, not a joint equilibrium of $(\bar{\vect{a}}, \mat{G}, \vect{b})$ on a fixed quadratic peak. We also acknowledge that the rotating-gradient and dimension-enlargement scenarios in the Discussion are the cases where this conditional equilibrium has the cleanest interpretation. Variable $\mat{H}$ on a non-quadratic surface is identified explicitly as a target for future work.
+
+\changesat{Introduction scope statements, p.~2, lines~40--58 and p.~3, lines~1--4; Section \textit{Equilibrium additivity index and the self-correcting dynamic}, especially the new \textit{Scope of this equilibrium} paragraph, p.~10, lines~39--52; additional equilibrium scope language, p.~11, lines~93--108; rotating-gradient/environmental-shift scoping in Discussion, p.~15, lines~54--66; Appendix~S8 Q5 (\textit{Does $\Ag$ apply near fitness optima?}), p.~28, lines~96--108, and Q13 (\textit{How do the dynamics of the additive channel differ between natural populations and elite breeding programs?}), p.~29, lines~95--111.}
+
+\subsection{Worked example}
+
+\begin{edquote}[Editor — worked example]
+I agree with rev\#1 that the worked example is not ideal: first there are no underlying ‘traits’ involved, second it involves asexual bacteria while we are clearly here in the sexual (most often diploid/polyploid) framework. I think a more illustrative example would be to actually simulate trait and fitness evolution in some simple sexual context. For ex.\ using SLiM you could simulate a classic landscape (with an additive geno-pheno map or not) with a quadratic fitness (or some non quadratic fitness to illustrate the taylor series example) and follow your index as it would be measured from the population, over time. With various regimes (for ex weak selection where you do expect gaussian breeding values à la Lande vs stronger selection where breeding values will not remain normally distributed). However you choose to use it, I think an actual simulated landscape with sexual reproduction and explicit genomes etc would be a better example of the whole approach than the chosen example.
+\end{edquote}
+
+\response
+We have removed the asexual \textit{E.~coli} (Khan et al.\ 2011) worked example entirely. In its place, we have implemented the simulation you suggest: a SLiM-based forward-time, individual-based simulation of a sexual diploid population (\textit{N}~=~2000) with an explicit genome (200 QTLs across four traits, strictly additive G$\to$BV map), Gaussian stabilising selection in phenotype space, and a moving optimum that drifts on one trait for 40 generations and then freezes. The simulation is run for 200 generations across 20 replicates. At every generation of every replicate we compute $\Vlin$, $\Vquad$, and the analytical $\Ag$ from the breeding-value cloud and the Hessian, and compare them against the empirical $R^2$ of log-fitness regressed on breeding values. The full simulation, design rationale, and three figures (multi-seed trajectory, across-replicate coefficient of variation, geometric invariants of $\mat{G}$) are reported in the new Appendix~S5. The identity $\Ag = R^2$ holds to a median absolute deviation of $0.013$ across all 200~generations and 20~replicates; the algebraic identity $2\Vquad = \sum_i \mu_i^2$ holds to floating-point precision. All code, parameter files, and per-replicate output are available in the public repository (\url{https://github.com/dortizbarrientos/additive-channels}).
+
+We have not extended the simulation to the strong-selection regime where Gaussian breeding values are expected to break down, and we flag this explicitly in the appendix as a target for follow-up work, since the current revision is focused on validating the central identity rather than mapping the full regime structure of the framework.
+
+\changesat{Old Section ``Worked example: \textit{E.~coli} fitness landscape'' removed from the revised manuscript; replacement stochastic simulation in Appendix~S5, p.~23, lines~22--end through p.~26, line~21 (Appendix~S5 begins mid-page~23 and spans pp.~24--26), with Figures~S5.1--S5.3 on pp.~24--26; Data Availability updated, p.~17, lines~50--55.}
+
+\subsection{Anisotropy and scaling}
+
+\begin{edquote}[Editor — anisotropy and scaling]
+You use the isotropic model to illustrate simple qualitative conclusions which is I think a good didactic choice. However when dealing with anisotropy you can already simplify matters from the start. By solving the generalized eignevalue problem (see eg Lande 1980 who does that de facto, or Martin Lenormand 2006 Evolution 60 (5), 893-907) you end up, from your initial set of traits a, with a new set of traits (say a' or x) that has identity matrix for G and some diagonal matrix for H. The quantities you defined and how they are modified by anisotropy might appear more explicitly this way (they will depend on the eiognevalues of G.H).
+\end{edquote}
+
+\response
+We have added a new section devoted to this construction. The simultaneous diagonalisation of $(\mat{G}, \mat{H})$ via the generalised eigenvalue problem $\mat{H}\vect{v} = \mu\,\mat{G}^{-1}\vect{v}$ produces a coordinate system in which $\mat{G} = \mat{I}$ and $\mat{H}$ is diagonal with eigenvalues $\mu_i$, exactly as Lande (1980) and Martin \& Lenormand (2006) recommend. In this rotated frame, $\Vquad = \tfrac{1}{2}\sum_i \mu_i^2$ becomes manifestly a function of the joint spectrum, and the equilibrium and dynamical analyses simplify accordingly. We have also added an explicit paragraph (\textit{On the asymmetric anisotropy in this argument}) immediately after the participation-ratio equations, explaining that the isotropic-$\mat{H}$ treatment in the dimensional-cancellation argument is a deliberate didactic choice and pointing the reader to the symmetric anisotropic treatment.
+
+\changesat{New Section \textit{Generalised eigenvalue rotation and the basis-free form of \Ag}, p.~6, lines~88--112 and p.~7, lines~1--25; \textit{Lines of least and greatest resistance} discussion, p.~7, lines~26--38; \textit{On the asymmetric anisotropy in this argument}, p.~12, lines~39--49; citations added in Literature Cited, including Lande, p.~18, lines~43--49, Martin \& Lenormand, p.~18, lines~67--69, and Technow et al., p.~18, lines~115--122.}
+
+\subsection{Scale-invariance of the diagnostic}
+
+\begin{edquote}[Editor — scaling]
+This would also help clarify the issue of scaling. We want scale free diagnostics obviously (that do not depend on whether I measure a trait in cm or m for ex.). Your index is scale free (because b and H are scaled the same way) but that does not appear clearly because a and G and H are defined initially in an arbitrary scale.
+\end{edquote}
+
+\response
+We have added an explicit scale-invariance statement and a short proof that $\Ag$ is invariant under any non-singular linear change of trait coordinates. This is now Appendix~S1 (paragraph on coordinate invariance of $\Vlin$ and $\Vquad$): for any invertible matrix $\mat{T}$, the transformation $\vect{a} \mapsto \mat{T}\vect{a}$ takes $\vect{b} \mapsto \mat{T}^{-\top}\vect{b}$, $\mat{G} \mapsto \mat{T}\mat{G}\mat{T}^{\top}$, and $\mat{H} \mapsto \mat{T}^{-\top}\mat{H}\mat{T}^{-1}$, leaving $\Vlin = \vect{b}^{\top}\mat{G}\vect{b}$ and $\Vquad = \tfrac{1}{2}\tr[(\mat{H}\mat{G})^2]$ unchanged. Hence $\Ag$ is invariant under change of units (cm to m, mass to mass-relative measures, etc.).
+
+\changesat{Appendix~S1, \textit{Coordinate invariance of \Vlin and \Vquad}, p.~19, lines~83--93; corresponding main-text scale-freeness statement, p.~7, lines~15--25.}
+
+\subsection{\texorpdfstring{Definition and validity of $\rho$}{Definition and validity of rho}}
+
+\begin{edquote}[Editor — definition of $\rho$]
+Although it is made clear that the goal is not de detaile rho, I was a bit confued by the use of this coef, which seems a bit phenomenological and not garanteed to be therefore a sufficient quantity to derive changes in G in eq.~(19). Is it certain that recombination/segregation boils down to yield eq.~(19)? Some worked examples would be relevant there (in appendix) to show what rho is then: eg in lande model or bulmer model or Weissman--Barton model: \url{https://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1002740} or a ref that has proven that this recursion in eq.~19 is valid, in what conditions. This will allow to clarify how inbreeding in breeding programs makes rho higher (not as a verbal argument but as an actual theoretical argument).
+\end{edquote}
+
+\response
+We have added a new subsection at the end of Appendix~S2 dedicated to deriving $\rho$ explicitly under the three classical frameworks you named. Specifically: in the Lande infinitesimal model under random mating with unlinked loci, the per-generation LD recursion $D'_{ij} = (1-r)\,D_{ij}$ gives $\rho = 1/2$; in the Bulmer model with arbitrary recombination architecture, $\rho = \mathbb{E}_{ij}[1 - r_{ij}]$ averaged over locus pairs, recovering $\rho = 1/2$ for unlinked loci and approaching $\rho \to 1$ for tightly linked loci; under partial selfing with rate $s$, $\rho \approx (1+F)/2$ where $F$ is the inbreeding coefficient at selfing--outcrossing equilibrium, recovering $\rho = 1/2$ at $s=0$ (random mating) and $\rho \to 1$ as $s \to 1$ (complete selfing). In the Barton \& Turelli (1991) multilocus framework, $\rho$ emerges as a leading eigenvalue of the recombination operator under conditions of weak selection, near-equilibrium allele frequencies, and symmetric recombination architecture. The verbal argument that ``inbreeding raises $\rho$'' is thereby translated into the formal statement that $\rho$ is monotone increasing in $F$, with $\rho \to 1$ as $F \to 1$.
+
+We have not extended the closure to the directional retention operator that would be required when these conditions fail; this is identified as future work in the manuscript and at the end of the new subsection.
+
+\changesat{Appendix~S2, \textit{The LD retention coefficient $\rho$: derivations under the Lande, Bulmer, and Barton--Turelli frameworks}, p.~20, lines~1--89; related recursion scope language in Appendix~S8, p.~29, lines~59--77; new bibliography entries include Bulmer 1971/1980, p.~17, lines~82--85, Hayman \& Mather, p.~18, lines~21--22, and Wright 1933/1969, p.~19, lines~21--25.}
+
+\subsection{\texorpdfstring{Math details: $\ell(\vect{a}) \in C^2$}{Math details: l(a) is C2}}
+
+\begin{edquote}[Editor — $C^2$ regularity]
+p3 l.~32: $\ell(a)$ is not strictly speaking arbitrary, it must still be $C^2$ I think to apply the taylor series.
+\end{edquote}
+
+\response
+Corrected. The text now states that $\ell$ must be at least $C^2$ in a neighbourhood of the reference point $\vect{a}_0$ for the second-order Taylor expansion to be well-defined, with the implicit assumption (also stated) that $\Vlin$ and $\Vquad$ are continuous functions of $(\vect{b}, \mat{H}, \mat{G})$ on the relevant domain.
+
+\changesat{Section \textit{Local Geometry of Log-Fitness Surfaces}, Taylor-expansion paragraph, p.~3, lines~74--81.}
+
+\subsection{\texorpdfstring{Centering: $\vect{a}_0 = \mathbb{E}[\vect{a}]$}{Centering: a_0 = E[a]}}
+
+\begin{edquote}[Editor — centering]
+various conclusions on moments of quadratic forms etc require that $E(\Delta a)=0$, which imposes that $a_0$ is in fact always $E(a)$, if correct simply state that the taylor series is taken around $E(a)$ not around some $a_0$ that ‘may be mean a’.
+\end{edquote}
+
+\response
+Agreed and corrected. The reference point $\vect{a}_0$ is now defined explicitly as $\vect{a}_0 = \mathbb{E}[\vect{a}]$, with the consequence $\mathbb{E}[\Delta\vect{a}] = 0$ stated explicitly as the centering identity that enables the moment calculations downstream. The earlier hedged phrasing ``typically the population mean'' has been removed.
+
+\changesat{Section \textit{Local Geometry of Log-Fitness Surfaces}, Taylor-expansion paragraph defining $\vect{a}_0=\mathbb{E}[\vect{a}]$ and $\mathbb{E}[\Delta\vect{a}]=0$, p.~3, lines~74--81.}
+
+\subsection{Mathai \& Provost (1992) citation}
+
+\begin{edquote}[Editor — minor]
+The results on quadratic forms (expectation and variance) are classic results you can cite for ex.: Mathai, A.~M., and S.~B.~Provost. 1992. Quadratic forms in random variables. Marcel Dekker, New York. and this does not seem to require a specific sup info. It is important to recall there when the normality of $a$ is required or not, I think it is for eq~(3) but not for eq.~(2).
+\end{edquote}
+
+\response
+Mathai \& Provost (1992) is now cited at the relevant point. We have also added an explicit note distinguishing the assumptions: the expectation $\mathbb{E}[Q] = \tfrac{1}{2}\tr(\mat{H}\mat{G})$ does not require normality of $\vect{a}$, only that $\mathbb{E}[\Delta\vect{a}\Delta\vect{a}^{\top}] = \mat{G}$. The variance $\Var(Q) = \tfrac{1}{2}\tr(\mat{H}\mat{G})^2$, however, does require multivariate normality of $\vect{a}$, since it depends on the fourth moments of the BV distribution. The supplementary appendix re-deriving the variance identity has been retained but trimmed.
+
+\changesat{Section \textit{Variance from the quadratic term}, p.~5, lines~21--28; Appendix~S1 setup and quadratic-form derivation, p.~19, lines~58--82; Mathai \& Provost bibliography entry, p.~18, lines~70--71.}
+
+\subsection{Citations of Figures 1 and 2}
+
+\begin{edquote}[Editor — minor]
+I did not find citations of figures 1 and 2 in the text (maybe i missed them).
+\end{edquote}
+
+\response
+Figures 1 and 2 are both cited in the text, as Mark noted: Figure 1 in the introduction and Figure 2 in the second paragraph. We have verified the cross-references resolve correctly in the revised manuscript and have added a sentence pointing the reader to Figure 1 from the second paragraph as well, to make the cross-referencing more visible.
+
+\changesat{Figure~1 is introduced in the framework overview, p.~2, lines~18--29, and shown on p.~3; Figure~2 is introduced in the simulation-validation paragraph, p.~6, lines~1--49, and shown on p.~7. Figure captions are not line-numbered in the compiled manuscript.}
+
+\subsection{Variables defined on first use}
+
+\begin{edquote}[Editor — minor]
+not defined yet variables: p3 l.6 $a$ id not defined yet. same for $\rho$ l.45 p3. same for $A_g$ l.66 p4. same for ‘effective dimension’ l.70 p4. same for $i$ on figure 8 I think: isn't this $i=\gamma$ in fact?
+\end{edquote}
+
+\response
+Each variable is now defined at first appearance. Specifically: $\vect{a}$ is defined as the breeding value vector at its first occurrence in the introduction; $\rho$ is defined as the LD retention coefficient at its first appearance in Section~\textit{Inheritance}; $\Ag$ is defined at its first appearance in the introduction (with the precise definition referred forward to Section~\textit{The additivity index}); ``effective dimension'' is defined as $\keff = (\tr\mat{G})^2/\tr(\mat{G}^2)$ where it first appears; and the index $i$ in the dimensional-cancellation figure is now explicitly labelled as the eigenvalue index. Table~1 and the new notation column referencing Lande--Arnold conventions provide a single source of truth for all symbols.
+
+\changesat{Introduction/framework overview, p.~2, lines~18--39; Section \textit{The Additivity Index}, p.~4, lines~111--116 and p.~5, lines~1--2 and lines~53--71; Table~1 expanded on p.~2 (table body not line-numbered); Figure~5 caption on p.~13 (caption not line-numbered).}
+
+\subsection{\texorpdfstring{Equation (2): $V(L)$ explicit}{Equation (2): V(L) explicit}}
+
+\begin{edquote}[Editor — minor]
+eq.(2) state that this is also $V(L)$ as you do for $V(Q)$ in eq.(3).
+\end{edquote}
+
+\response
+Done. The text now explicitly states that the right-hand side of Equation~(2) is $V(L) = \vect{b}^{\top}\mat{G}\vect{b}$, mirroring the explicit statement for Equation~(3).
+
+\changesat{Section \textit{Variance from the linear term}, p.~5, lines~3--20, including Equation~(4) and the explicit $\Var(\vect{b}^{\top}\Delta\vect{a})=\vect{b}^{\top}\mat{G}\vect{b}$ expression.}
+
+\subsection{Equation (22) reformatting}
+
+\begin{edquote}[Editor — minor]
+eq.\ (22) please reshape to fit in space.
+\end{edquote}
+
+\response
+We acknowledge this and will address it during proofs once the journal's two-column layout is applied. The equation source has been kept in its current form pending the production layout, since reshaping decisions interact with the journal's column width.
+
+\changesat{Pending proof-only item; the affected inheritance-recursion display is p.~9, lines~1--8.}
+
+\subsection{Figure 7 log axis}
+
+\begin{edquote}[Editor — minor]
+fig 7 A \& B might be more explicit if time is in log scale.
+\end{edquote}
+
+\response
+This is a figure-regeneration task that requires the original Python script for Figure~7 (now Figure~5 in the revised manuscript). The current Figure~5 caption explicitly notes the log--log axes used and gives the equation references and parameter values, which addresses the legibility concern at the caption level. A full regeneration with log-time axis is a small additional change we will apply at the final-figure pass.
+
+\changesat{Former Figure~7 has been retired in the restructuring; the corresponding dynamics figure is now Figure~5 on p.~13 (caption not line-numbered), with supporting discussion p.~11, lines~72--92. Final figure-regeneration/proof check remains flagged.}
+
+\subsection{Recall equation numbers in figure captions}
+
+\begin{edquote}[Editor — minor]
+l26 p11 please recall the eq.\ numbers for ‘above’; for figures please recall the equations used to derive them (eg eq 19 when computing dynamics over time I guess).
+\end{edquote}
+
+\response
+Done. All ``above''-style references now name specific equation numbers, and figure captions now explicitly identify the equations from which the displayed dynamics are derived. Figure~5 caption, for example, now references the inheritance recursion (Equations~(22) and~(23)) and the equilibrium expressions.
+
+\changesat{Figure captions checked on pp.~3, 7, 9, 12, and 13; captions are not line-numbered in the compiled manuscript. Main-text equation references supporting these captions occur at p.~5, lines~3--71, p.~8, lines~37--67, and p.~9, lines~1--8.}
+
+\subsection{\texorpdfstring{Equations (27--28) anisotropic-$\mat{G}$ vs.\ isotropic-$\mat{H}$ asymmetry}{Equations (27-28) anisotropic-G vs. isotropic-H asymmetry}}
+
+\begin{edquote}[Editor — minor]
+eq.\ (27--28): somehow it seems G is anisotropic but H remains isotropic which seems odd here (see comment on anistropy above).
+\end{edquote}
+
+\response
+Acknowledged. We have added a paragraph immediately after Equation~(28) titled \textit{On the asymmetric anisotropy in this argument} explaining that the isotropic-$\mat{H}$ treatment is a deliberate didactic choice to isolate the dimensional structure of $\mat{G}$ from the dimensional structure of $\mat{H}$. The fully anisotropic case is treated in Section~\textit{Generalised eigenvalue rotation and the basis-free form of \Ag} (the new generalised-eigenvalue rotation section), where simultaneous diagonalisation of $(\mat{G}, \mat{H})$ gives $\Vquad = \tfrac{1}{2}\sum_i \mu_i^2$ in terms of the joint eigenvalues. The paragraph also points to Technow et al.\ (2026) as an empirical instance of an anisotropic and history-dependent $\mat{H}$ emerging from $E(NK)$ simulations.
+
+\changesat{New paragraph \textit{On the asymmetric anisotropy in this argument}, p.~12, lines~39--49; formal generalised-eigenvalue treatment cross-referenced at p.~6, lines~88--112 and p.~7, lines~1--14.}
+
+\newpage
+
+%% ===================================================================
+%% Reviewer #1
+%% ===================================================================
+
+\section{Reviewer \#1}
+
+\subsection{Summary of the manuscript's contribution}
+
+\begin{revquote}[Reviewer 1 — opening]
+This manuscript proposes the concept of ``additive channels,'' defined as regions of genetic space in which a population's variance is small relative to the curvature of the log-fitness landscape, such that linear prediction captures most fitness-relevant variation. The authors formalize this idea through an additivity index $(A_g)$, derived from a local Taylor expansion of log-fitness, and connect it to selection and inheritance dynamics. The core mathematical intuition (i.e., that a local linear approximation is more accurate for small deviations from the reference point) follows from Taylor's theorem. The manuscript's contribution is to develop this geometric observation into a diagnostic framework for quantitative genetics, connecting it to selection and inheritance dynamics. The manuscript is clearly written and the core mathematical framework is coherent, but several conceptual issues should be addressed.
+\end{revquote}
+
+\response
+We thank the reviewer for the careful and accurate summary of the contribution.
+
+\subsection{\texorpdfstring{Major Concern \#1: Framing of the G$\to$P map and the BV-to-fitness map}{Major Concern \#1: Framing of the G->P map and the BV-to-fitness map}}
+
+\begin{revquote}[Reviewer 1 — Major Concern \#1]
+The manuscript opens by identifying an apparent paradox: ``the genotype-phenotype map is nonlinear in ways that molecular and developmental biology have documented extensively'' (page 1, lines 20--22), yet ``additive genetic models, which ignore these interactions, often work reasonably well in practice'' (page 1, lines 23--24). The problem to be solved is presented to be one about the G-P map: why do additive genetic models succeed despite nonlinear genotype-to-phenotype relationships? However, the framework developed to resolve this paradox does not actually incorporate the G-P map. The derivations, including the definition of $A_g$, focus on the mapping of breeding values to fitness (i.e., $\ell(a)$), assuming a given distribution of breeding values. Breeding values are defined as the best linear predictions of phenotype from genotype, which means that nonlinearities of the G-P map are not explicitly represented in the derivations. It is therefore not clear how a framework operating at the breeding-value-to-fitness level can answer a question framed at the level of the genotype-to-phenotype map.
+
+It is equally unclear what terms like ``epistasis'' and ``additivity'' (which have precise definitions at the level of the G-P map) mean when applied to the mapping from breeding values to fitness, since the classical gene-level definitions do not translate straightforwardly onto this level of description. The authors are using ``additivity'' to mean the condition where the first-order (linear) term of a Taylor expansion of log-fitness dominates the second-order (curvature) term, as captured by their index $A_g$. This is a coherent and potentially useful definition, but it differs from the classical quantitative-genetic meaning of ``additivity'', and the relationship between the two is not made explicit.
+
+My concern is reinforced by the fact that several of the derivations appear to rely on an unstated assumption that the G-P map is additive or linear. For example, in the treatment of G dynamics in Section 4, only stabilizing (quadratic) selection is shown to reshape G. Under nonlinear G-P maps, however, directional selection can also substantially alter additive genetic variance. For example, G can increase rather than decrease under directional selection when positive epistasis is present in the G-P map (Carter et al.\ 2005). This directly raises a question about the paper's central claim that populations enter additive channels through variance compression: under nonlinear G-P maps, selection can expand G rather than compress it, reversing the prediction entirely. There is a substantial body of work on the consequences of G-P map nonlinearities for evolutionary quantitative genetics that is largely absent from the current framing. Engaging with this literature would strengthen the manuscript's positioning, particularly given that the Introduction explicitly invokes the ``nonlinearity of the genotype-phenotype map'' as the motivating problem (most importantly Rice 2002; but see also Carter et al.\ 2005; Hansen 2006, 2013; Morrissey 2015; Milocco \& Salazar-Ciudad 2022; González-Forero 2026).
+
+I want to flag one further instance of what I see as a confusion between the maps. The worked example (page 17) uses data that map genotypes directly to fitness, with no breeding values involved. The Walsh decomposition applied there partitions variance in log-fitness across genotypes into additive ($V_1$) and higher order epistatic components. But this is a decomposition of genotypic values into average effects and interaction deviations, which is a statement about the G-P map (with fitness treated as the phenotype). Specifically, $V_1$ captures how much of the variance in log-fitness across genotypes is explained by the average effects of individual mutations across genetic backgrounds. This is not the same as asking how the distribution of breeding values in a population relates to the local curvature of the fitness surface, which is what the theoretical framework actually addresses.
+
+In summary, it would help to clarify the scope of the framework in one of two ways: If the intended contribution is a framework for the mapping of breeding values to fitness under a linear G-P map, then this assumption should be stated explicitly at the outset; the definition of ``additivity'' in this context should be clearly defined at that level; and the central claim that the framework determines when ``additive genetic models provide adequate approximations'' should be qualified accordingly, since additive genetic models in the standard sense implicate the G-P map, which this framework does not address. If, on the other hand, the goal is as currently stated: to explain the success of additive genetic models despite nonlinear genotype-to-phenotype relationships, then the framework needs to be substantially extended to incorporate the G-P map, and prior work on that question should be acknowledged and engaged with directly.
+\end{revquote}
+
+\response
+This is the central concern of the revision and we agree with it in full. The revised manuscript adopts the first of the two paths the reviewer offers: we state explicitly at the outset that the framework treats breeding values as primitives and analyses the local geometry of log-fitness over breeding-value space, leaving the upstream G$\to$P map as an upstream input that the framework's diagnostic operates on rather than analyses. Specifically:
+
+\begin{enumerate}[leftmargin=*]
+
+\item \textit{The introduction is rewritten} to distinguish the G$\to$P question (``do allelic effects combine additively?'') from the BV-to-fitness question (``given a distribution of breeding values, when does the linear approximation to log-fitness capture most of the genetic variance in fitness?''). The new opening paragraphs make this distinction the structural anchor of the paper. We have removed the framing of the BV-to-fitness question as a paradox about the G$\to$P map, and replaced it with a precise claim about what the framework does and does not address.
+
+\item \textit{The literature on G$\to$P-map nonlinearity is now engaged with directly} in the introduction and the Discussion. Cheverud \& Routman (1995) on the statistical-versus-functional additivity distinction; Hansen (2006, 2013) on the evolution of genetic architecture and the role of epistasis in selection response; Carter, Hermisson \& Hansen (2005) on $V_A$ expansion under positive epistasis with directional selection; Rice (2002) on the population-genetic theory for the evolution of developmental interactions. We thank the reviewer for naming this literature explicitly: it is exactly the body of work the original manuscript should have engaged with, and we have positioned the framework as complementary to it rather than replacing it.
+
+\item \textit{The Carter et al.\ (2005) point about $V_A$ expansion under positive epistasis is engaged with directly}, in two places. First, in the Discussion subsection \textit{Mechanistic versus statistical epistasis}, we acknowledge that under nonlinear G$\to$P maps with positive epistasis, $V_A$ can rise under sustained directional selection rather than fall. Second, in the limitations subsection of the new Appendix S5, we note that our simulation has a strictly additive G$\to$BV map by construction, so the variance dynamics we observe arise entirely from selection-induced linkage disequilibrium and drift acting at the BV level, not from epistasis-mediated reorganisation of additive variance. We frame this as a deliberate scope choice (``by design rather than by omission''): the framework treats BVs as primitives, takes the BV distribution as given, and diagnoses the local geometry of log-fitness over BV-space; whatever the upstream G$\to$P map---linear or nonlinear, additive or richly epistatic---it delivers the BV distribution on which the diagnostic operates.
+
+\item \textit{The asexual \textit{E.~coli} worked example has been removed}, eliminating the conflation the reviewer correctly identifies. The new Appendix~S5 simulation operates entirely at the BV-to-fitness level: explicit genome, additive G$\to$BV map, breeding-value cloud at every generation, regression of log-fitness on breeding values to compute the empirical $R^2$ that the framework's $\Ag$ predicts.
+
+\item \textit{The relationship between the framework's geometric ``additivity'' and the classical statistical-additivity concept is now stated explicitly} in the introduction and in the new Discussion subsection \textit{Mechanistic versus statistical epistasis}: $\Ag$ measures the local fraction of log-fitness variance captured by the linear approximation to $\ell(\vect{a})$ in BV-space; this is a population-and-location-dependent quantity, not a global property of the genetic architecture. We make explicit that the same population can have high $\Ag$ in one regime and low $\Ag$ in another, even with the same G$\to$P map.
+
+\end{enumerate}
+
+\changesat{Introduction, p.~1, lines~13--35 and p.~2, lines~1--39; Discussion \textit{Mechanistic versus statistical epistasis}, p.~15, lines~67--122 and p.~16, lines~1--61; \textit{Connections to natural populations}/dimension-enlargement scope, p.~15, lines~54--66; Appendix~S5 BV-level scope, p.~25, line~58 through p.~26, line~13; Appendix~S7 historical context, p.~27, line~42 through p.~28, line~32. New citations include Carter et al.\ p.~17, lines~88--90, and Cheverud--Routman, p.~17, lines~91--92; Hansen 2013, p.~18, lines~13--14, and Hansen et al.\ 2006, p.~18, lines~15--17; Rice 2002, p.~18, lines~91--93.}
+
+\subsection{Major Concern \#2: Conflation of statistical and functional additivity}
+
+\begin{revquote}[Reviewer 1 — Major Concern \#2]
+In the Introduction, the paper frames the coexistence of widespread molecular interactions with the success of additive statistical models as a paradox requiring resolution. However, this has been explored in the literature by the distinction between statistical and functional additivity (, dominance and epistasis), established by Cheverud \& Routman (1995) and Hansen (2013): even when underlying mechanisms are highly nonlinear, the average effect of an allele remains well-defined and is the best first-order approximation to its contribution to phenotype. This distinction should be discussed in the paper, and the novelty of the results should be clarified with respect to those previous results. The authors' own framing on page 2, ``a helpful way to reconcile these facts is to treat `additivity' as a local property of population movement on a curved surface, not as a claim that the underlying biology lacks interactions'', is precisely the statistical additivity concept, but no reference to that literature is provided. Similarly, the conclusion on page 14 that additive models function as ``tangent-plane descriptions'' that degrade when populations explore larger regions of phenotype space has been stated explicitly in the context of nonlinear G-P maps at least by Rice (2008) and Milocco \& Salazar-Ciudad (2022).
+\end{revquote}
+
+\response
+Agreed. The framing on page~2 of the original was indeed the statistical-additivity concept of Cheverud \& Routman (1995) and Hansen (2013), and we should have cited that literature explicitly. The revised introduction now does so at the point where this distinction is invoked, and the Discussion subsection \textit{Mechanistic versus statistical epistasis} engages with the literature head-on, distinguishing what we add (a diagnostic, $\Ag$, that quantifies the local geometric condition under which the statistical-additivity approximation is accurate as a function of $(\vect{b}, \mat{H}, \mat{G})$) from what is already established (the conceptual distinction itself). The ``tangent-plane'' phrasing has been retained but is now contextualised with explicit citation to Rice (2008) and Milocco \& Salazar-Ciudad (2022).
+
+\changesat{Introduction, p.~1, lines~13--35 and p.~2, lines~1--17; Discussion \textit{Mechanistic versus statistical epistasis}, p.~15, lines~67--122 and p.~16, lines~1--61; relevant bibliography entries: Carter et al.\ p.~17, lines~88--90; Cheverud--Routman p.~17, lines~91--92; Hansen 2013 p.~18, lines~13--14; Hansen et al.\ 2006 p.~18, lines~15--17; Rice 2002 p.~18, lines~91--93; Rice 2008 p.~18, lines~96--98; Milocco \& Salazar-Ciudad p.~18, lines~79--81.}
+
+\subsection{\texorpdfstring{Major Concern \#3: Equilibrium analysis under constant $\mat{H}$ and fixed landscape shape}{Major Concern \#3: Equilibrium analysis under constant H and fixed landscape shape}}
+
+\begin{revquote}[Reviewer 1 — Major Concern \#3]
+The paper states that $A_g$ is most informative when $b \neq 0$, that is, when the population is away from a fitness optimum and the population mean is moving. Yet the equilibrium derivation in Section~\textit{A minimal inheritance recursion} holds $b$, $H$, $M$, and $\rho$ constant while this mean evolution proceeds. Holding $H$ constant while the population mean changes is a property that only a few landscapes can fulfill (for example, not a multi-peaked landscape) and this should be clarified. Additionally, holding $M$ constant implies that mutational input to phenotypic variance does not change as allele frequencies evolve, which as noted above (Major Concern 1) again requires a linear G-P map.
+
+The classic mutation-selection balance equation assumes $b \approx 0$ and an approximately stationary mean, making constant $H$ and $M$ both reasonable assumptions. The present framework however requires the population mean to be moving ($b \neq 0$) while holding landscape geometry and mutational structure fixed. These two requirements are in tension, and it would help to state and justify the conditions under which both can be expected to hold.
+\end{revquote}
+
+\response
+The reviewer identifies a real conceptual tension that we have now made explicit. We have added a \textit{Scope of this equilibrium} paragraph immediately after Equation~(28) stating that $\Ag^*$ is a conditional $\mat{G}$-equilibrium under a held or externally maintained $(\vect{b}, \mat{H})$, not a joint equilibrium of $(\bar{\vect{a}}, \mat{G}, \vect{b})$ on a fixed quadratic peak. Two specific regimes in which the conditional equilibrium has a clean interpretation are now identified: (i) rotating-gradient scenarios in which $\vect{b}$ persists because the optimum is itself displacing or rotating relative to the population (this matches the ``moving target'' regime of natural environmental change and the ``moving optimum'' regime of breeding programs), and (ii) timescale-separation regimes in which $\mat{G}$ relaxes faster than $\bar{\vect{a}}$ moves, so that the conditional equilibrium is a good approximation at each generation. The case $\vect{b} \to \vect{0}$ on a fixed quadratic peak is now identified explicitly as the framework's known scope limit: $\Vlin \to 0$ collapses the predictive interpretation of $\Ag$, and the framework no longer applies meaningfully (this is the ``stable, well-adapted population'' regime which the framework predicts to be the regime in which additive prediction is least reliable, not most reliable). The constant-$M$ assumption is also now explicitly tied to the BV-level scope: at the BV level, $\mat{M}$ is the mutational input to BV variance, and treating it as constant is consistent with the framework's BV-as-primitive scope, with the understanding that allele-frequency-induced changes in $\mat{M}$ would arise under a richer G$\to$P map.
+
+\changesat{Section \textit{Equilibrium additivity index and the self-correcting dynamic}, p.~10, lines~33--52 and p.~11, lines~93--108; Introduction scope statements, p.~2, lines~40--58 and p.~3, lines~1--4; Discussion rotating-gradient/environmental-shift scope, p.~15, lines~54--66; Appendix~S8 Q5 (\textit{Does $\Ag$ apply near fitness optima?}), p.~28, lines~96--108, and Q13 (\textit{How do the dynamics of the additive channel differ\ldots}), p.~29, lines~95--111.}
+
+\subsection{Other Comments \#4: Editorial improvements}
+
+\begin{revquote}[Reviewer 1 — Other Comment \#4]
+The manuscript would be improved with further editing:
+\begin{itemize}
+  \item Several figures could be moved to Supplementary Material.
+  \item Some classical results are invoked without citation (for example, the compression of $G$ under quadratic selection). I suggest adding those references.
+  \item The sentence ``A complete treatment would require tracking the alignment among the principal directions of $G$, $H$, and $b$, which we leave to future work'' appears verbatim twice (pages 13 and 14). The observation that empirical $G$ matrices are dominated by a few principal components also appears twice on page 14. Both duplications should be removed.
+  \item Appendix S6 has numerical references that are not explained.
+\end{itemize}
+\end{revquote}
+
+\response
+\begin{itemize}[leftmargin=*]
+  \item \textit{Figures moved to Supplementary Material.} The original 11 figures have been reduced to 5 main-text figures with the new Appendix~S5 carrying three additional supplementary figures (S5.1--S5.3). Several figures from the original (the rotation tutorial, the worked-example panels, the duplicate trajectory plots) have either been removed or moved to the new Appendix S5.
+  \item \textit{Citations for classical results.} The compression of $\mat{G}$ under quadratic selection is now cited to Lande (1980), Bulmer (1971, 1980), and Barton \& Turelli (1991) at first invocation. Other classical results (Hansen \& Houle evolvability, Hill--Goddard--Visscher dominantly-additive variance) have likewise been credited.
+  \item \textit{Duplications and final proof check.} The original repeated passages have been reviewed during restructuring, and the Discussion remains flagged for a final duplicate-sentence pass before submission.
+  \item \textit{Appendix S6 numerical references.} The unexplained numerical references in the old Appendix S6 (now S8 after the appendix renumbering) have been replaced or expanded into proper sentences with explicit citations.
+\end{itemize}
+
+\changesat{Figure and table reduction is structural: main figures now appear as Figures~1--5 on pp.~3, 7, 9, 12, and 13, and Tables~1--2 on pp.~2 and 8. Citation/support for selection-induced compression appears p.~8, lines~42--50 and p.~8, lines~68--89; Hansen--Houle evolvability is added p.~5, lines~17--20 and p.~18, lines~18--20. Appendix~S8 (Anticipated Questions, renumbered from old~S6) spans p.~28, lines~33--117, and p.~29, lines~1--end; previously-unexplained numerical references have been expanded into proper sentences with explicit citations.}
+
+\subsection{Other Comment \#5: Figure 2 confusing}
+
+\begin{revquote}[Reviewer 1 — Other Comment \#5]
+Figure 2 is confusing in two respects. The population trajectory appears to overshoot the fitness maximum, which is not explained. Additionally, the population ellipses extend outside the plotted surface, while I suppose they should be confined to the surface.
+\end{revquote}
+
+\response
+The original Figure~2 has been redesigned in the revision. The new Figure~2 (\texttt{figure2\_validation}) has been redrawn so that the population trajectory does not visually overshoot, and the variance ellipses are visually confined to the surface region they correspond to. The figure caption has also been expanded to describe the dynamics shown.
+
+\changesat{Figure~2 redrawn on p.~7 (caption unnumbered); supporting simulation-validation text expanded at p.~6, lines~1--49.}
+
+\subsection{\texorpdfstring{Other Comment \#6: $\Vlin$ as Hansen \& Houle (2008) evolvability}{Other Comment \#6: V_lin as Hansen & Houle (2008) evolvability}}
+
+\begin{revquote}[Reviewer 1 — Other Comment \#6]
+Equation (2) is the evolvability metric of Hansen \& Houle (2008). I suggest making that connection explicit.
+\end{revquote}
+
+\response
+The connection is now made explicit at the point where $\Vlin$ is introduced: $\Vlin = \vect{b}^{\top}\mat{G}\vect{b}$ is the evolvability metric $e(\vect{b})$ of Hansen \& Houle (2008) when the gradient is normalised, and we now state that $\Ag$ is a natural geometric partner to evolvability (the former measures the magnitude of additive variance in the gradient direction; the latter measures whether that variance will actually govern response, or whether curvature will displace it). We have also added a sentence to the Discussion subsection \textit{Connections to natural populations} positioning $\Ag$ alongside evolvability in this way.
+
+\changesat{Section \textit{Variance from the linear term}, p.~5, lines~3--20; Table~1, p.~2; Discussion \textit{Connections to natural populations}, p.~15, lines~23--55; Hansen \& Houle bibliography entry, p.~18, lines~18--20.}
+
+\subsection{\texorpdfstring{Other Comment \#7: $\Vlin \propto \sigma^2$, $\Vquad \propto \sigma^4$ as a Taylor consequence}{Other Comment \#7: V_lin propto sigma^2, V_quad propto sigma^4 as a Taylor consequence}}
+
+\begin{revquote}[Reviewer 1 — Other Comment \#7]
+The differential scaling of $\Vlin \propto \sigma^2$ and $\Vquad \propto \sigma^4$ (page 4) follows immediately from the structure of the Taylor expansion and should be acknowledged as a mathematical consequence of that structure rather than presented as a finding.
+\end{revquote}
+
+\response
+Acknowledged and corrected. The text now presents the differential scaling as a mathematical consequence of the structure of the Taylor expansion (linear-in-$\Delta\vect{a}$ versus quadratic-in-$\Delta\vect{a}$), rather than as a finding. We retain the discussion of why this differential scaling matters mechanistically, since this is what underlies the self-correcting dynamic, but the structural origin is now properly framed.
+
+\changesat{Section \textit{Variance from the quadratic term}, p.~5, lines~33--43; related self-correcting-dynamic statement, p.~10, lines~53--68.}
+
+\newpage
+
+%% ===================================================================
+%% Reviewer #2
+%% ===================================================================
+
+\section{Reviewer \#2}
+
+\subsection{Summary of the manuscript's contribution}
+
+\begin{revquote}[Reviewer 2 — opening]
+This manuscript proposes to explore the fitness landscape from multivariate quantitative traits, focusing on an ``additivity index'', which measures the local curvature of the fitness function. After having introduced the concepts underlying their model, the authors propose to describe the properties and the evolution of this curvature in several situations, contrasting e.g.\ natural populations and artificial selection in breeding programs. In particular, the authors show that populations may enter ``additive channels'' during which some substantial linearity could be maintained for a long time. As far as I could check, the maths seems right, and the proposed framework is rather clear. I have particularly appreciated the appendix, which is pedagogical, and its form (esp in Appendix S5 and S6) was both unusual and refreshing -- appendix S6 actually sounds like a preliminary response to reviewers, and really help to understand the authors' arguments. On the down side, I had the feeling that the organisation of the ms, its length, the objectives of the model, and some modeling choices makes it more difficult to follow and to connect to existing results than necessary. The ms is rather long, its organisation is a bit confusing, and many parts look inconsistent with each other, or maybe even contradictory.
+\end{revquote}
+
+\response
+We thank the reviewer for the careful reading and for the substantive criticisms below. We have used the revision to address each of the three concerns, and we comment specifically on the length and organisation in our responses to those concerns.
+
+\subsection{Concern \#1: Length and organisation}
+
+\begin{revquote}[Reviewer 2 — Concern \#1]
+Even if clear and pedagogical, the manuscript is quite lengthy and keeping track of the authors' arguments is sometimes challenging. With 11 figures, 4 tables, and 28 equations (excluding the 6 pages of supplementary appendix), 7 section headers and countless subsections, I found it hard to understand where the authors wished to drive the reader. The lack of methodological details does not help to follow the authors' arguments, in most figures, it is rather unclear whether their point is to illustrate graphically some concepts (fig 3, fig 6?) or to display some formal results (e.g.\ fig 4, fig 5, which do not indicate parameter values, contrary for figs 7 and 9). Many symbols (such as $L$ from eq 6, $R$ from eq 10, $\sigma$ from eq 15, $\delta$ from eq 25\ldots) are not in Table 1, which does not help figuring out the meaning of specific results.
+\end{revquote}
+
+\response
+We have addressed this on three fronts. \textit{First}, the figure count has been reduced from 11 to 5 main-text figures (with three additional supplementary figures in the new Appendix~S5), and the table count from 4 to 2. The asexual \textit{E.~coli} worked example has been removed entirely. \textit{Second}, every figure now declares whether it is conceptual or formal, and parameter values are stated in captions for all formal figures. \textit{Third}, Table~1 has been expanded to include all symbols used in the text, including the ones the reviewer specifically named ($L$, $Q$, $R$, $\sigma^2$, $\delta$, $S$). A new column in Table~1 also gives the Lande--Arnold notation correspondence, addressing the reviewer's Concern~\#2 simultaneously. We are open to making a further length cut if the editor or reviewers indicate it remains necessary after the conceptual revisions are evaluated; our current plan is to do this cut as a final pass after the revised structure is settled.
+
+\changesat{Structural revision: main figures now Figures~1--5 on pp.~3, 7, 9, 12, and 13; tables now Table~1 on p.~2 and Table~2 on p.~8; Table~1 includes the expanded notation/Lande--Arnold correspondence on p.~2; captions checked on pp.~3, 7, 9, 12, and 13 (captions are not line-numbered).}
+
+\subsection{Concern \#2: Rationale for breeding-value-space framing; relation to Lande--Arnold}
+
+\begin{revquote}[Reviewer 2 — Concern \#2]
+The rationale for proposing a new reference for multivariate quantitative genetics (based on breeding values) and the relationship between the model parameters $b$, $H$, $W$, $\Omega$, $\Gamma$, and the classical Lande--Arnold parameters ($\beta$, $\gamma^2$, $G$, $P$, and $E$) should be made more explicit. It is indeed tempting to interpret $W(a)$ as if it was $W(z)$, as the authors do in most places, but it is not the case if $E \neq 0$. First, $W(a)$ is not defined formally, is it the expectation of the fitness conditioned on $a$, i.e.\ $W(a) = \int p(z|a)W(z)dz$? Page 2 in the footnote, it is said that ``$\beta \approx b$ in the breeding value space'', but I do not think this is true: for one trait, $\beta = \mathrm{cov}(z, W(z))/\Var(z)$, which meaning in the ``breeding value space'' is unclear (at least, this is different from $\mathrm{cov}(a, \Var(a))/\Var(a)$). Page 4 line 3 the text states that $H$ ``connects to the gamma matrix'', but this remains vague. Overall, the rationale for working on the breeding value scale is not straightforward: it makes all the descriptors of the fitness function different from Lande--Arnold, and it makes it difficult to compare e.g.\ equation 16 with equivalent formulations involving the gamma quadratic gradient. $b$ cannot be multiplied by $G$ to predict the selection response, so graphical representations showing $G$ on the landscape $W(a)$ are somehow misleading; overall, I think this confusing parallel notation needs to be fixed, and the relationship between the phenotypic dimension and the breeding value dimension needs to be clarified.
+\end{revquote}
+
+\response
+We have addressed this in three structural additions. \textit{First}, $W(\vect{a})$ is now defined formally as the conditional expectation of fitness given the breeding value, $W(\vect{a}) = \int p(\vect{z} \mid \vect{a}) W(\vect{z})\,d\vect{z}$, with the explicit consequence that $\log W(\vect{a})$ is the log-expected-fitness in BV-space and $\ell(\vect{a}) = \log W(\vect{a})$ is the object whose Taylor expansion the framework uses. \textit{Second}, we have added a new section (Section 2.4, \textit{Notation: relation to Lande--Arnold (1983)}) that states the formal relationship between phenotype-space and BV-space gradient and Hessian: $\bm{\beta} \approx \vect{b}$ to leading order \emph{after mapping both to the same domain, under weak selection and Gaussian assumptions}; outside that regime they are formally distinct objects. The Hessian relation is given explicitly: $\mat{H}_{\vect{z}} = \bm{\gamma} - \bm{\beta}\bm{\beta}^{\top}$ in phenotype-space, and the buffering relation to BV-space is $\mat{H}_{\vect{a}}^{-1} = \mat{H}_{\vect{z}}^{-1} - \mat{E}$ when $\mat{E}$ is small enough that this remains negative-definite. \textit{Third}, Appendix~S6 (\textit{Notation Dictionary Derivations}) gives the full derivation of these relations and a recipe for computing $\Ag$ from a published Lande--Arnold study. Table~1 has been updated with a Lande--Arnold correspondence column. The footnote on page~2 of the original (about $\bm{\beta} \approx \vect{b}$) has been tightened to make the same-domain and weak-selection conditions explicit.
+
+The reviewer's specific point that ``$b$ cannot be multiplied by $G$ to predict selection response'' is correct in the strict sense, and we now state this explicitly: in BV-space, $\mat{G}\vect{b}$ is the per-generation directional component of the response, but the full Lande--Arnold response prediction in phenotype-space is $\Delta\bar{\vect{z}} = \mat{G}\bm{\beta}$, with $\bm{\beta} \approx \vect{b}$ valid only under the conditions stated above. The framework's diagnostic $\Ag$ is independent of the specific coordinate system chosen, by the scale-invariance argument now stated explicitly in Appendix~S1.
+
+\changesat{Section \textit{Notation: relation to Lande--Arnold (1983)}, p.~4, lines~50--110; Table~1, p.~2; footnote on $\bm{\beta}$ versus $\vect{b}$, p.~2, footnote~1 (unnumbered); Appendix~S6 (\textit{Notation Dictionary Derivations}), p.~26, line~22 through p.~27, line~41.}
+
+\subsection{Concern \#3: Conceptual clarity about the purpose of the framework}
+
+\begin{revquote}[Reviewer 2 — Concern \#3]
+A central issue with the manuscript is the conceptual blur about the purpose of the theoretical developments. In particular, the ms is often ambiguous about whether the topic is the linearity of the genotype-phenotype map, the linearity of the fitness function, or the accuracy of the predictions of the selection response. Overall, I thus feel that the manuscript would benefit from a large-scale conceptual clarification. The current version seems to redefine model assumptions depending on the context: is the fitness surface log-quadratic, as assumed in most the manuscript, or is $H$ changing when the population moves over the surface? Are the underlying traits additive, or can epistasis contribute to the changes in $G$? Is the fitness landscape constant (as in fig 2) or is the optimum changing (as in breeding programs involving truncation selection)? Is the equilibrium achieved when $G$ is constant, when $A_g$ is constant, or when $R$ is constant? Is the mutational variance 0, non-zero but negligible, larger in some situations?
+
+The introduction starts with the classical observation that GP-maps are by nature non-linear, because of dominance and epistasis, but are often modeled as purely additive with satisfactory predictions for the structure of the genetic architecture. This clearly refers to the relationship between genotypes and phenotypes. Yet, very rapidly, the discussion switches to the Lande equation and the curvature of the fitness function. My concern is that this ambiguity is never really addressed in the manuscript: successive arguments discuss epistasis in QTL mapping studies, and epistasis on fitness (such as in the worked example page 17). Yet, is it very clear that the theoretical model proposed in the manuscript assumes a non-linear mapping between phenotype and fitness (from eq 1, commented line 30: ``log-fitness surface over breeding-value space''). For most of the manuscript, breeding values are expected to behave according to the infinitesimal model (including all the discussion about $G$ matrices), so that the very ``non-additivity'' argument developed in the introduction becomes irrelevant. It seems quite obvious that applying stabilizing selection on additive traits generate a substantial amount of dominance and epistasis for fitness, which is fundamentally different from dominance and epistasis for the traits, which originales from physiology. I would thus tend to consider that non-additivity at the trait level is a totally different question than epistasis for fitness, and it sounds hopeless to address both at once, as it is implicitly suggested by the authors.
+
+A related question, central to the study, is the nature of the problem with non-linearity of the fitness surface. The introduction line 30 seems to suggest that the accurate predictions from the Lande--Arnold equation is conceptually challenging, which I am not sure to understand. The Lande--Arnold equation grounds in Fisher's concept of additive genetic variance, and does not assume that the GP map is linear: it rather states that only the linear component matters in terms of immediate response to selection. This is mathematically true, under a substantial list of assumptions about the nature of the fitness function and of the genetic architecture. Two fitness landscapes with the same gradient but different curvatures should lead to the same evolutionary response. Linearity only matters when trying to apply this equation recursively, as both $G$ and $\beta$ can change from generation to generation. I am thus not sure that the questions the authors wished to address is stated clearly.
+
+Another key point that needs to be clarified is the nature of the non-linearity that is expected to be caught with the additivity index $A_g$. As far as I can tell, an equivalent index could be $\Vlin/V_G$, where $V_G$ is the genetic variance for fitness. This index would quantify the extant to which the fitness function is ``not flat''. Instead, the authors argue for $\Vlin/(\Vlin+\Vquad)$, i.e.\ the extent to which the quadratic approximation of the fitness surface departs from linearity, and I am not sure to understand the rationale for it. The curvature $H$ quantifies the average local curvature of the fitness function, and could be used to predict e.g.\ how $\beta$ may change in successive generations. However, what is the meaning of $\Vquad$? It seems possible to imagine some situations in which $\Vquad$ is 0 but the fitness function is not linear, for instance at inflection points. What does $A_g$ measures exactly, is it used as a proxy for $\Vlin/V_G$, or is there a rationale to summarize the local fitness function to its 2nd order Taylor approximation? It seems that the manuscript keeps oscillating between a local fit option ($H$ is the approximation of the local curvature, and measuring $H$ a few generations later should lead to a different result) and a global quadratic model (as in the Fisher geometric model, assuming a bell-shaped stabilizing selection around a fixed optimum), but I am not convinced that it is fair to switch continuously between these options depending on which one is more convenient for the argument currently discussed.
+
+Finally, I also found the concept of the ``equilibrium'' particularly difficult to grasp. The authors make it clear that their model is designed to understand adaptation, i.e.\ when the population sits far from the optimum (by the way, I could not understand the argument page 6 line 21: $A_g=0$ when $\Vlin=0$, there is no $0/0$ issue there because $\Vquad > 0$ at equilibrium). Yet, there is no equilibrium in the selection gradient when climbing a quadratic fitness surface: each step brings the population closer to the optimum, which decreases the gradient. I was thus confused about the conditions in which the equilibrium can be achieved, and it seems that assuming both a curved fitness surface and a stationary gradient is logically impossible (unless the optimum moves). I imagine that the authors meant that the linearity of the fitness landscape referred to a constant progress in fitness, which can be achieved if e.g.\ the additive variance in the traits increase while the gradient decreases, but it does not look exactly what section ``Selection reshapes genetic covariances'' suggests (since an equilibrium $G$ is calculated there). Page 10 suggests that $A_g$ could achieve an equilibrium, but (i) this does not seem to be possible with a quadratic fitness function, and (ii) what would be the evolutionary meaning of a constant $A_g$ if everything else changes (including the speed of the response to selection?).
+\end{revquote}
+
+\response
+This concern is the most substantive in the review and we have used it to drive several of the largest revisions. We respond to each part separately.
+
+\subsubsection{\texorpdfstring{The G$\to$P map versus the BV-to-fitness map}{The G->P map versus the BV-to-fitness map}}
+
+We agree with the reviewer that ``non-additivity at the trait level is a totally different question than epistasis for fitness, and it sounds hopeless to address both at once.'' The original manuscript was written as if the framework addressed both; the revision does not. The framework now explicitly takes breeding values as primitives and analyses the local geometry of log-fitness over BV-space. The Discussion subsection \textit{Mechanistic versus statistical epistasis} engages with the literature on G$\to$P-map nonlinearities to acknowledge what the framework does not address, and we have specifically been careful in that subsection to keep the mechanistic-epistasis-lives-upstream-in-the-G$\to$P-map distinction intact: in the framework's notation, the local Hessian $\mat{H}$ is the BV-to-fitness curvature, and the part of mechanistic epistasis visible to the standing breeding-value cloud is governed by $\mat{H}\mat{G}$ through $\Vquad$. The new Appendix~S5 simulation operates entirely at the BV-to-fitness level with a strictly additive G$\to$BV map. The question the framework asks is now clearly stated: \textit{given the BV distribution at any given moment, when does the local linear approximation to log-fitness capture most of the genetic variance in fitness, and how does that fraction evolve as selection and inheritance reshape the BV distribution?}
+
+\subsubsection{What model assumption is being held fixed when}
+
+We have added an explicit \textit{Scope} paragraph in the equilibrium section and a corresponding clarification in the rotation section. The framework is local and second-order: at any instant, $\ell(\vect{a})$ is approximated by its second-order Taylor expansion around $\bar{\vect{a}}$, which means $\mat{H}$ is the local Hessian at the current population mean. This is treated as approximately constant only over the timescale of the analysis. The equilibrium derivation in Section~\textit{A minimal inheritance recursion} now explicitly identifies as a conditional $\mat{G}$-equilibrium under held $(\vect{b}, \mat{H})$, with two regimes (rotating gradient; timescale separation) where this is meaningful and a third regime ($\vect{b} \to 0$ on a fixed quadratic peak) where the framework's diagnostic enters its scope limit. These regimes are now stated up front rather than left implicit.
+
+\subsubsection{\texorpdfstring{Why $\Vlin/(\Vlin + \Vquad)$ rather than $\Vlin/V_G$}{Why V_lin/(V_lin + V_quad) rather than V_lin/V_G}}
+
+This is a fair question and we have addressed it directly in the new Discussion subsection. $\Ag = \Vlin/(\Vlin + \Vquad)$ measures \emph{the fraction of log-fitness variance captured by the second-order Taylor expansion that is captured by the linear term alone}. It is a quadratic-closure diagnostic. By contrast, $\Vlin/V_G$ would measure the fraction of \emph{total} log-fitness variance captured by the linear term, which requires knowing $V_G$ exactly---a quantity that is generally inaccessible analytically because higher-order terms beyond the quadratic are model-specific. The reviewer is also correct that at inflection points, $\Vquad$ can be zero while $V_G$ is not, so $\Ag$ overstates linearity at such points; we now state this scope limit explicitly. The framework is therefore intentionally a second-order local-closure diagnostic, and we no longer present it as a proxy for total genetic variance in fitness.
+
+\subsubsection{\texorpdfstring{The $A_g = 0$ at equilibrium argument}{The A_g = 0 at equilibrium argument}}
+
+The reviewer is correct that there is no $0/0$ issue at equilibrium, since $\Vquad > 0$. We have removed the misleading sentence and replaced it with the correct statement: at $\vect{b} \to 0$, $\Vlin \to 0$ but $\Vquad$ remains finite and positive, so $\Ag \to 0$ cleanly. This is the framework's known scope limit (the ``stable population at the optimum'' regime) and is no longer presented as anything else.
+
+\changesat{Introduction rewritten, p.~1, lines~13--60 and p.~2, lines~1--39; Section \textit{Notation: relation to Lande--Arnold (1983)}, p.~4, lines~50--110; Discussion \textit{Mechanistic versus statistical epistasis}, p.~15, lines~67--122 and p.~16, lines~1--61; \textit{Scope of this equilibrium}, p.~10, lines~39--52; corrected $A_g=0$ argument, p.~6, lines~52--60; Appendix~S5 validation and scope, p.~23, line~22 through p.~26, line~21.}
+
+\subsection{Minor comments}
+
+\begin{revquote}[Reviewer 2 — minor comments]
+\begin{itemize}
+  \item Page 2 line 27, $H$ has not been defined yet.
+  \item Figure 2, are the horizontal axes standing for breeding values for different traits? What is the orange line? Why does it seem to be ``hidden'' behind the landscape?
+  \item Page 3 table 1, $S$ is not defined.
+  \item Page 3 line 57, the tables are not called in the order in which they appear.
+  \item Page 4 line 13, it seems that the first criterion for the Taylor approximation to hold is that the fitness function is close to log-quadratic.
+  \item Page 5 line 9, this illustrates one of the points above, this works only if the fitness function is quadratic (i.e.\ the Taylor approximation is not an approximation).
+  \item Page 14 Table 4, the effect of $M$ is ambiguous here. $M$ can be expected to be approx.\ the same in all these situations, but its effect on $G$ may be different.
+  \item Page 18, data availability, there is no link yet to the code.
+\end{itemize}
+\end{revquote}
+
+\response
+\begin{itemize}[leftmargin=*]
+  \item \textit{$H$ defined on first use.} $\mat{H}$ is now defined as the log-fitness Hessian at first use in the introduction, with the precise definition referred forward.
+  \item \textit{Figure 2 axes.} Figure~2 has been redrawn with explicit axis labels indicating that they are breeding values for traits 1 and 2; the orange line and any visual occlusion have been removed in the redesign; the caption explicitly explains all visual elements.
+  \item \textit{$S$ defined in Table~1.} $S$ (the selection differential) is now defined in Table~1, along with the other previously-missing symbols.
+  \item \textit{Table call-out order.} Tables are now called in the order in which they appear.
+  \item \textit{Log-quadratic criterion.} The text now states explicitly that the framework requires $\ell(\vect{a})$ to be approximately log-quadratic in a neighbourhood of the reference point, and that the second-order Taylor expansion gives an exact fit only if the fitness surface is exactly log-quadratic globally. Outside that special case, the framework is a local-closure approximation.
+  \item \textit{$M$ effect in Table~4.} Table~4 has been retired in favour of the streamlined Table~1; the discussion of $M$'s differential effects on $\mat{G}$ across regimes is now in the prose, with explicit acknowledgement that $\mat{M}$ may take similar values across regimes while still differentially affecting $\mat{G}$ via its interaction with the selection regime.
+  \item \textit{Code availability.} A repository URL (\url{https://github.com/dortizbarrientos/additive-channels}) is now provided in the Data Availability section, containing all simulation code, parameter files, and per-replicate output for the Appendix~S5 simulation under an MIT licence.
+\end{itemize}
+
+\changesat{Introduction/scope and definitions, p.~1, lines~13--60 and p.~2, lines~18--39; Figure~2 redrawn on p.~7 with support text p.~6, lines~1--49; Table~1 expanded on p.~2; log-quadratic/Taylor criterion, p.~3, lines~74--81 and p.~4, lines~31--49; old Table~4 retired structurally, with natural/breeding contrasts moved into prose at p.~3, lines~54--73 and p.~11, lines~72--108; Data Availability, p.~17, lines~50--55.}
+
+\newpage
+
+%% ===================================================================
+%% Summary of changes
+%% ===================================================================
+
+\section{Summary of structural changes}
+
+For convenience, the full set of structural changes to the manuscript is summarised below.
+
+\subsection{New main-text content}
+
+\begin{itemize}[leftmargin=*]
+\item Rewritten Introduction (paragraphs 1--3) establishing the breeding-value-as-primitive scope and distinguishing the G$\to$P question from the BV-to-fitness question.
+\item New Section labelled \texttt{sec:notation\_dictionary} (\textit{Notation: relation to Lande--Arnold (1983)}) with formal correspondence between $(\vect{b}, \mat{H})$ in BV-space and $(\bm{\beta}, \bm{\gamma})$ in phenotype-space.
+\item New Section labelled \texttt{sec:rotation} (\textit{Anisotropy and the rotation to whitened coordinates}) deriving the simultaneous diagonalisation of $(\mat{G}, \mat{H})$ via the generalised eigenvalue problem.
+\item New paragraph \textit{On the asymmetric anisotropy in this argument} after the participation-ratio equations.
+\item New paragraph \textit{Scope of this equilibrium} after Equation~(28).
+\item New Discussion subsections \textit{Mechanistic versus statistical epistasis}, the GCA-fraction bridge, and \textit{Model selection in genomic prediction}.
+\item Cooper co-origin paragraph in \textit{Connections to breeding programs}.
+\item Dimension-enlargement scoping paragraph in \textit{Connections to natural populations}.
+\end{itemize}
+
+\subsection{New supplementary content}
+
+\begin{itemize}[leftmargin=*]
+\item New Appendix~S5 (\textit{Stochastic-simulation validation of the additive-channel framework}) with three figures (S5.1, S5.2, S5.3) reporting the SLiM-based forward-time simulation of a sexual diploid population with explicit genome.
+\item New Appendix~S6 (\textit{Notation Dictionary Derivations}) deriving the formal relationship to Lande--Arnold parameters and providing a recipe for computing $\Ag$ from a published selection-gradient study.
+\item New Appendix~S2 subsection (\textit{The LD retention coefficient $\rho$: derivations under the Lande, Bulmer, and Barton--Turelli frameworks}) deriving $\rho$ in three classical multilocus frameworks.
+\item Appendix~S1 expanded with coordinate-invariance proof.
+\end{itemize}
+
+\subsection{Structural refactoring}
+
+\begin{itemize}[leftmargin=*]
+\item Asexual \textit{E.~coli} (Khan et al.\ 2011) worked example removed entirely.
+\item Figure count reduced from 11 to 5 main-text figures (Appendix~S5 figures S5.1--S5.3 are supplementary).
+\item Table count reduced from 4 to 2 main-text tables. Table~1 expanded with Lande--Arnold correspondence column and all symbols flagged by Reviewer~2.
+\item Appendices reordered for conceptual coherence: math derivations (S1--S3), worked example (S4), simulation validation (S5), notation dictionary (S6), historical context (S7), FAQ (S8).
+\item Discussion redundancy flagged for the final proof pass, especially after the new conceptual material was inserted.
+\end{itemize}
+
+\subsection{New citations added}
+
+Cheverud \& Routman (1995); Hansen (2006, 2013); Hansen \& Houle (2008); Carter, Hermisson \& Hansen (2005); Rice (2002, 2008); Milocco \& Salazar-Ciudad (2022); Mathai \& Provost (1992); Lande (1980); Bulmer (1980); Barton \& Turelli (1991); Wright (1933); Wright (1969); Hayman \& Mather (1953); Haller \& Messer (2019); Walsh \& Lynch (2018); Stern (2013); Technow et al.\ (2026).
+
+\subsection{Pending items for final pre-submission pass}
+
+\begin{itemize}[leftmargin=*]
+\item Confirm that the page and line-number ranges in this response letter still match after any final manuscript recompile.
+\item Final length pass: we plan to do a sentence-level cut after the conceptual revisions are evaluated; we are open to guidance from the editor on the target length.
+\item Final duplicate-sentence pass in the Discussion, especially around the new \textit{Mechanistic versus statistical epistasis} subsection.
+\item Equation~22 reshape (deferred to proofs).
+\item Figure~5 log time-axis regeneration (deferred to final figure pass).
+\end{itemize}
+
+\end{document}
