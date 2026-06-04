@@ -1,0 +1,9 @@
+output/*_bv.csv
+output/*_opt.csv
+logs/
+figures/
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+__MACOSX/
