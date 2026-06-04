@@ -172,10 +172,11 @@
 %     constituent eigenvalues (Fig S5.2), geometric invariants k_eff
 %     and condition(G) of the genetic covariance (Fig S5.3), and a
 %     synthesis with explicit limitations and BV-level scope statement.
-%   - Three figures are inserted (multiseed_4trait_moving.png,
-%     cv_4trait_moving.png, geom_invariants_4trait_moving.png) using
-%     [H] placement and a local figure-counter renumbering so they
-%     print as S5.1--S5.3 rather than continuing the main-text count.
+%   - Three figures are inserted (multiseed_4trait_moving.pdf,
+%     cv_4trait_moving.pdf, geom_invariants_4trait_moving.pdf) using
+%     updated Appendix S5 simulation outputs and a local figure-counter
+%     renumbering so they print as S5.1--S5.3 rather than continuing
+%     the main-text count.
 %   - Three new bibkeys are introduced and used only in S5:
 %     HallerMesser2019, Walsh2018, Stern2013. The other cites
 %     (CarterHermissonHansen2005, Hansen2013, Schluter1996,
@@ -994,7 +995,7 @@ Additivity is not a property of genes but a property of populations in context. 
 % ==========================================================
 \section*{Data Availability}
 % ==========================================================
-All code used to generate figures and run simulations is available at \url{https://github.com/dortizbarrientos/additive-channels-fitness-landscapes} under an MIT licence. Parameter files and scripts required to reproduce all figures are included in the repository. No new empirical genotype or phenotype data were generated for this study.
+All code used to generate figures and run simulations is available at \url{https://github.com/dortizbarrientos/additive-channels} under an MIT licence. Parameter files and scripts required to reproduce all figures are included in the repository. No new empirical genotype or phenotype data were generated for this study.
 
 % ==========================================================
 \section*{Acknowledgments}
@@ -1010,7 +1011,7 @@ The authors declare no competing interests.
 ARC Centre of Excellence for Plant Success in Nature and Agriculture [CE200100015].
 
 \bibliographystyle{genetics}
-\bibliography{additiveChannels/text/references_finalpass_cleaned}
+\bibliography{references}
 
 % ==========================================================
 % APPENDICES
@@ -1358,7 +1359,7 @@ The key insight is that additivity is not a property of the genes but of the pop
 \setcounter{figure}{0}
 \renewcommand{\thefigure}{S5.\arabic{figure}}
 
-This appendix reports a simulation-based validation of the additive-channel framework using forward-time individual-based simulations in SLiM~\citep{HallerMesser2019}. The framework's central analytical claim is the identity \mbox{$\Ag = R^2$} between the analytical additivity index and the empirical fraction of log-fitness variance captured by linear regression on breeding values. We test this identity, and several derived predictions about the across-replicate reproducibility of the framework's geometric quantities, in finite populations evolving under sustained directional selection followed by stabilising selection at a new optimum. All code, parameters, and per-replicate output are available in the public repository \url{https://github.com/dortizbarrientos/additive-channels-fitness-landscapes}.
+This appendix reports a simulation-based validation of the additive-channel framework using forward-time individual-based simulations in SLiM~\citep{HallerMesser2019}. The framework's central analytical claim is the identity \mbox{$\Ag = R^2$} between the analytical additivity index and the empirical fraction of log-fitness variance captured by linear regression on breeding values. We test this identity, and several derived predictions about the across-replicate reproducibility of the framework's geometric quantities, in finite populations evolving under sustained directional selection followed by stabilising selection at a new optimum. All code, parameters, and per-replicate output are available in the public repository (\href{https://github.com/dortizbarrientos/additive-channels}{github.com/dortizbarrientos/additive-channels}).
 
 \subsection*{Simulation design}
 
@@ -1370,7 +1371,7 @@ Three features of this design merit comment. First, by displacing the optimum we
 
 At each generation of each replicate we computed three quantities from the breeding-value cloud and the Hessian $\mat{H}=-\bm{\gamma}$: the linear variance $\Vlin = \vect{b}^{\top}\mat{G}\vect{b}$, the quadratic variance $\Vquad = \tfrac{1}{2}\tr[(\mat{H}\mat{G})^2]$, and the analytical additivity index $\Ag = \Vlin/(\Vlin+\Vquad)$. We compared \Ag against the empirical $R^2$ from the Walsh decomposition of log-fitness on breeding values within each generation~\citep{Walsh2018}.
 
-Figure~\ref{fig:s5_multiseed} shows the trajectory across 20 replicates. The analytical \Ag (mean across reps, blue line) and empirical $R^2$ (mean, red dashed line) are visually indistinguishable across the entire trajectory, including during the rapid rise (generations 1--40) when the population is tracking the moving optimum, the peak near generation 41, and the decay after the optimum freezes. Across all 200 generations and 20 replicates the median absolute difference $|\Ag - R^2|$ is 0.013, and the algebraic identity \mbox{$2\Vquad = \sum_i \mu_i^2$} holds to floating-point precision (max error \mbox{$1.32\times 10^{-16}$}). Two observations follow.
+Figure~\ref{fig:s5_multiseed} shows the trajectory across 20 replicates. The analytical \Ag (mean across replicates, solid line) and empirical $R^2$ (mean, dashed line) are visually indistinguishable across the entire trajectory, including during the rapid rise (generations 1--40) when the population is tracking the moving optimum, the peak at the generation-40/41 transition, and the decay after the optimum freezes. Across all 200 generations and 20 replicates the median absolute difference $|\Ag - R^2|$ remains 0.013 to three decimal places, and the algebraic identity \mbox{$2\Vquad = \sum_i \mu_i^2$} holds to floating-point precision (maximum numerical discrepancy $<10^{-15}$). Two observations follow.
 
 \paragraph{The identity is not specific to equilibrium.} 
 The framework's analytical derivation is local and pointwise: it asserts equality between $\Ag$ and $R^2$ at any \mbox{$(\vect{b},\mat{H},\mat{G})$} configuration consistent with the local-Gaussian closure, regardless of whether the population is at, near, or far from any equilibrium. The simulation evaluates the identity at every generation of every replicate, providing an empirical test at hundreds of distinct off-equilibrium configurations along each trajectory. The identity holds throughout, including during phases when the local-Gaussian assumption is stressed by rapid mean displacement.
@@ -1380,8 +1381,8 @@ After generation~50, the population settles near the new optimum and the gradien
 
 \begin{figure*}[ht]
 \centering
-\includegraphics[width=\textwidth]{multiseed_4trait_moving.png}
-\caption{Multi-seed trajectory across 20 stochastic realisations. \textbf{Left:} the analytical $\Ag$ (blue line, mean of 20 replicates) and the empirical $R^2$ (red dashed line, mean) overlay throughout the trajectory, with $5\text{--}95\%$ percentile band shown for $\Ag$ in light blue. The grey trace is replicate 1 individually, included to confirm that single-replicate trajectories are representative of the mean. \textbf{Centre:} the four sorted eigenvalues of $\mat{G}$ across replicates with $5\text{--}95\%$ bands. \textbf{Right:} the gradient magnitude $|\vect{b}|$ rises during the directional phase (generations 1--40), peaks at generation~41 just as the optimum stops moving, then decays as the population catches up to the frozen optimum.}
+\includegraphics[width=\textwidth]{multiseed_4trait_moving.pdf}
+\caption{Multi-seed trajectory across 20 stochastic realisations. \textbf{Left:} the analytical $\Ag$ (solid line, mean of 20 replicates) and empirical $R^2$ (dashed line, mean) overlap throughout the trajectory, with the $5\text{--}95\%$ percentile band shown for $\Ag$. The grey trace shows replicate~1 individually. \textbf{Centre:} the four sorted eigenvalues of $\mat{G}$ across replicates, with $5\text{--}95\%$ percentile bands. \textbf{Right:} the gradient magnitude $|\vect{b}|$ rises during the directional phase (generations 1--40), peaks around the point at which the optimum stops moving, and then decays as the population catches up to the frozen optimum.}
 \label{fig:s5_multiseed}
 \end{figure*}
 
@@ -1389,9 +1390,9 @@ After generation~50, the population settles near the new optimum and the gradien
 
 A natural worry about the identity \mbox{$\Ag = R^2$} is that it might hold trivially in any individual replicate but be unstable across replicates---that is, that the absolute value of \Ag at a given generation might vary so much from seed to seed that the diagnostic is empirically uninformative. We tested this directly by computing the across-replicate coefficient of variation \mbox{$\mathrm{CV}(x) = \mathrm{sd}(x)/|\mathrm{mean}(x)|$} per generation for each metric.
 
-Figure~\ref{fig:s5_cv} reports the result. At the peak (generation~40), \Ag has \mbox{$\mathrm{CV}=0.064$} and $R^2$ has \mbox{$\mathrm{CV}=0.056$}; the framework invariants $\Vlin$, $\Vquad$, $|\vect{b}|$ have CV in the range $0.09$--$0.36$. The individual eigenvalues of $\mat{G}$ have CV with median $0.196$ and range $0.130$--$0.249$, and the trait-fixed diagonals $G_{kk}$ have CV with median $0.236$. Two readings follow.
+Figure~\ref{fig:s5_cv} reports the result. At the peak (generation~40), \Ag has \mbox{$\mathrm{CV}=0.064$} and $R^2$ has \mbox{$\mathrm{CV}=0.056$}. The constituent quantities $\Vlin$, $\Vquad$, and $|\vect{b}|$ have CVs of $0.088$, $0.362$, and $0.174$, respectively. The individual eigenvalues of $\mat{G}$ have median CV $0.191$ and range $0.130$--$0.249$, whereas the trait-fixed diagonals $G_{kk}$ have median CV $\approx 0.237$. Two readings follow.
 
-\paragraph{\Ag is approximately three to four times tighter across replicates than the eigenvalues from which it is computed.} 
+\paragraph{\Ag is approximately three times tighter across replicates than the individual eigenvalues of \texorpdfstring{$\mat{G}$}{G}.} 
 This is the headline reproducibility result: at the peak, the framework's diagnostic is not merely identical to $R^2$ in each replicate, it is also more reproducible \emph{across} replicates than the underlying components. The mechanism is straightforward. \Ag is a scalar function of \mbox{$(\vect{b},\mat{H},\mat{G})$} that depends only on the trace-like quantities $\Vlin$ and $\Vquad$, not on the full eigenstructure of $\mat{G}$. Independent stochastic realisations of finite-population dynamics produce $\mat{G}$ matrices whose individual eigenvalues vary substantially (because which alleles fix in which order is genuinely seed-dependent), but whose trace-like summaries vary much less. \Ag inherits the tighter variability of the summaries rather than the looser variability of the eigenvalues.
 
 \paragraph{The CV inflates after the population reaches the optimum, but for a known and benign reason.} 
@@ -1399,8 +1400,8 @@ After generation~50, the across-replicate CV of \Ag rises and eventually exceeds
 
 \begin{figure*}[ht]
 \centering
-\includegraphics[width=\textwidth]{cv_4trait_moving.png}
-\caption{Across-replicate variability of framework quantities. \textbf{Left:} per-generation coefficient of variation across 20 replicates, with metrics colour-coded by group. Framework invariants $(\Ag, R^2, \Vlin, \Vquad, |\vect{b}|)$ in blue, trait-fixed $\mat{G}$ diagonals in orange, sorted eigenvalues of $\mat{G}$ and $\mat{H}\mat{G}$ in teal. The vertical dotted line marks the peak generation. The pronounced rise in the blue traces after generation~50 reflects the framework's known scope limit at the optimum (mean $\Ag \to 0$ inflates the ratio $\mathrm{sd}/|\mathrm{mean}|$), not a degradation of invariance. \textbf{Right:} bar chart of CV at the peak (generation~40), showing $\Ag$ and $R^2$ at $\mathrm{CV}\approx 0.06$, the eigenvalues at median $\mathrm{CV}\approx 0.20$, and the diagonals at median $\mathrm{CV}\approx 0.24$.}
+\includegraphics[width=\textwidth]{additiveChannels/figures/cv_4trait_moving.pdf}
+\caption{Across-replicate variability of framework quantities. \textbf{Left:} per-generation coefficient of variation, $\mathrm{CV}(x)=\mathrm{sd}(x)/|\bar{x}|$, across 20 replicates for $\Ag$, empirical $R^2$, $\Vlin$, $\Vquad$, $|\vect{b}|$, trait-fixed diagonals of $\mat{G}$, sorted eigenvalues of $\mat{G}$, and curvature-weighted eigenvalues $\mu_i$. The vertical dotted line marks generation~40, when the moving optimum freezes. The rise in $\mathrm{CV}(\Ag)$ and $\mathrm{CV}(R^2)$ after the population approaches the optimum reflects the known $\vect{b}\to\vect{0}$ scope limit, where the denominator in $\mathrm{sd}(x)/|\bar{x}|$ becomes small, not a loss of the identity $\Ag=R^2$. \textbf{Right:} CV at generation~40, showing $\Ag=0.064$, empirical $R^2=0.056$, median sorted-$\mat{G}$-eigenvalue CV $=0.191$, and median trait-diagonal CV $\approx 0.237$.}
 \label{fig:s5_cv}
 \end{figure*}
 
@@ -1409,33 +1410,33 @@ After generation~50, the across-replicate CV of \Ag rises and eventually exceeds
 The reproducibility result above raises a more pointed question: \emph{why} is \Ag tighter than its eigenvalue components? One hypothesis is that the geometric \emph{shape} of $\mat{G}$ (its effective dimensionality and anisotropy) is reproducible across replicates even when the individual axes are not. To test this we computed two scalar functions of $\mat{G}$'s eigenvalue spectrum that depend only on the \emph{set} of eigenvalues and not on any labelling:
 \begin{align}
 \keff(t) &\;=\; \frac{(\tr\mat{G}(t))^2}{\tr[\mat{G}(t)^2]} \;=\; \frac{\bigl(\sum_i \lambda_i\bigr)^2}{\sum_i \lambda_i^2}, 
-\label{eq:s8_keff} \\[2pt]
+\label{eq:s5_keff} \\[2pt]
 \kappa(\mat{G}(t)) &\;=\; \frac{\lambda_{\max}(\mat{G}(t))}{\lambda_{\min}(\mat{G}(t))}. 
-\label{eq:s8_cond}
+\label{eq:s5_cond}
 \end{align}
 The first quantity is the participation ratio (the \textit{Dimensional Considerations} section); it ranges in $[1, n_{\text{traits}}]$, with $\keff = n_{\text{traits}}$ when $\mat{G}$ is isotropic and $\keff = 1$ when $\mat{G}$ has collapsed to a single direction. The second is the condition number of $\mat{G}$ as a covariance matrix and quantifies how stretched the variance ellipsoid is. Both are immune by construction to the eigenvalue-relabelling that occurs when sorted eigenvalues swap order during the trajectory.
 
-Figure~\ref{fig:s5_geom} reports the results. \keff describes a non-monotone trajectory: it rises from $2.95$ at generation~1 to a peak of $3.27$ at generation~36, then falls to a stable $2.74$ by generation~100. The condition number traces a complementary path: it falls from $5.91$ to a minimum of $3.81$ at generation~40 (the most isotropic configuration $\mat{G}$ ever reaches), then rises to $7.98$ at generation~200. Three statements follow.
+Figure~\ref{fig:s5_geom} reports the results. \keff describes a non-monotone trajectory: it rises from $2.95$ at generation~1 to a peak of $3.27$ at generation~36, then falls to a stable $2.74$ by generation~100. The condition number traces a complementary path: it falls from $5.91$ to a minimum near generation~40 (the most isotropic configuration $\mat{G}$ reaches), then rises steadily through generation~200 as the smallest eigenvalue continues to fall. Three statements follow.
 
 \paragraph{The early rise of \keff is variance redistribution, not variance expansion.} 
 The total genetic variance $\tr\mat{G}$ falls monotonically from $6.29$ at generation~1 to $3.32$ at generation~200; total variance is being lost throughout. The transient rise of \keff during generations 1--30 reflects \emph{redistribution} of the available variance among directions rather than any expansion of $\mat{G}$. Because our genotype-to-breeding-value map is strictly additive by construction, this dynamic is mechanistically distinct from the $\mat{G}$-expansion under directional selection that has been described in the presence of nonlinear $G\!\to\!P$ maps and positive epistasis~\citep{CarterHermissonHansen2005}; the latter cannot operate in our simulation. What we observe instead is a generic property of multivariate Gaussian-stabilising selection acting on an anisotropic $\mat{G}$: directions with the largest standing variance experience the largest absolute compression per generation, so the spectrum becomes transiently more uniform before the most-selected direction continues compressing past parity.
 
-\paragraph{\keff is reproducible across replicates; $\kappa(\mat{G})$ is not.} 
-At the peak generation, $\mathrm{CV}(\keff) = 0.059$, comparable to $\mathrm{CV}(\Ag) = 0.064$ and well below the median individual-eigenvalue CV of $0.196$. By contrast $\mathrm{CV}(\kappa) = 0.240$, slightly higher than the eigenvalue median. The contrast is mathematically expected: \keff is built from the full sum and sum-of-squares of eigenvalues and is therefore robust to noise in any single eigenvalue, whereas $\kappa$ is a ratio of the largest to the smallest eigenvalue and is dominated by noise in $\lambda_{\min}$, which is itself the noisiest quantity in the spectrum. The geometric invariance result therefore has structure: \emph{not all sort-invariant scalars are equally reproducible}, and the framework's reliance on trace-like summaries rather than condition-number-like ratios is part of why \Ag inherits good reproducibility.
+\paragraph{\keff is much more reproducible across replicates than $\kappa(\mat{G})$.} 
+At the peak generation, $\mathrm{CV}(\keff) = 0.059$, comparable to $\mathrm{CV}(\Ag) = 0.064$ and well below the median individual-eigenvalue CV of $0.191$. By contrast $\mathrm{CV}(\kappa) = 0.240$, slightly higher than the eigenvalue median. The contrast is mathematically expected: \keff is built from the full sum and sum-of-squares of eigenvalues and is therefore robust to noise in any single eigenvalue, whereas $\kappa$ is a ratio of the largest to the smallest eigenvalue and is dominated by noise in $\lambda_{\min}$, which is itself the noisiest quantity in the spectrum. The geometric invariance result therefore has structure: \emph{not all sort-invariant scalars are equally reproducible}, and the framework's reliance on trace-like summaries rather than condition-number-like ratios is part of why \Ag inherits good reproducibility.
 
 \paragraph{$\Ag$ and \keff are jointly reproducible but causally distinct.} 
 At the peak, \Ag and \keff have similar CV ($0.064$ and $0.059$). It is tempting to read this as a causal claim that dimensional collapse is what drives the population into the additive channel, but the timing argues against that interpretation. \keff peaks five generations \emph{before} \Ag, and the rise of \Ag is dominated by the rise of $|\vect{b}|^2$ in the numerator $\Vlin = \vect{b}^{\top}\mat{G}\vect{b}$, not by changes in the geometric shape of $\mat{G}$. The right reading is that \Ag and \keff are \emph{both} sort-invariant geometric scalars of the local landscape, and \emph{both} inherit reproducibility from the same underlying mechanism (the variance-dampening of trace-like summaries under stochastic eigenvalue noise), but neither causes the other along the trajectory.
 
 \begin{figure*}[ht]
 \centering
-\includegraphics[width=\textwidth]{geom_invariants_4trait_moving.png}
-\caption{Geometric invariants of $\mat{G}$ across replicates. \textbf{Top-left:} effective dimension $\keff(t)$ across 20 replicates with $5\text{--}95\%$ percentile band. The horizontal dotted line marks the isotropic value $\keff = n_{\text{traits}} = 4$. The trajectory rises during generations 1--36 and then settles near $\keff \approx 2.7$, indicating that one effective dimension of variance has been compressed by selection. \textbf{Top-right:} condition number $\kappa(\mat{G}(t)) = \lambda_{\max}/\lambda_{\min}$ on a logarithmic axis, reaching its minimum (most isotropic configuration) at generation~40 and growing afterward as $\lambda_{\min}$ continues to fall. The wider band on $\kappa$ reflects its sensitivity to noise in $\lambda_{\min}$. \textbf{Bottom:} bar chart of across-replicate CV at the peak (generation~40), with the geometric invariants \keff and $\kappa$ plotted alongside the individual eigenvalues for direct comparison. The vertical dotted reference line is the median eigenvalue CV. \keff sits well below this reference; $\kappa$ sits above it.}
+\includegraphics[width=\textwidth]{geom_invariants_4trait_moving.pdf}
+\caption{Geometric invariants of $\mat{G}$ across replicates. \textbf{Top-left:} effective dimension $\keff(t)$ across 20 replicates, with mean and $5\text{--}95\%$ percentile band; the dashed horizontal line marks the isotropic value $n_{\text{traits}}=4$. \textbf{Top-right:} anisotropy $\kappa(\mat{G})=\lambda_{\max}/\lambda_{\min}$, with mean and $5\text{--}95\%$ percentile band on a logarithmic axis. \textbf{Bottom:} CV at generation~40 for $\keff$, $\kappa(\mat{G})$, and the sorted eigenvalues of $\mat{G}$. $\keff$ has $\mathrm{CV}=0.059$, well below the median eigenvalue CV of $0.191$, whereas $\kappa(\mat{G})$ has $\mathrm{CV}=0.240$, reflecting its sensitivity to the smallest eigenvalue.}
 \label{fig:s5_geom}
 \end{figure*}
 
 \subsection*{Synthesis and limitations}
 
-Across 20 stochastic replicates of a four-trait moving-optimum scenario with a strictly additive genotype-to-breeding-value map, three results emerge. \emph{First}, the analytical identity $\Ag = R^2$ holds at every generation of every replicate, including off-equilibrium configurations during the directional phase and the approach to the new optimum. \emph{Second}, the framework's diagnostic \Ag is approximately three to four times tighter across replicates than the individual eigenvalues from which it is computed, and the algebraic mechanism for this tightness is that \Ag depends on trace-like summaries rather than the full eigenstructure. \emph{Third}, the geometric invariants $\keff$ and $\kappa(\mat{G})$ have qualitatively different across-replicate behaviour: \keff is reproducible to roughly the same tolerance as \Ag, while $\kappa$ is not, in line with their differing algebraic dependence on the spectrum.
+Across 20 stochastic replicates of a four-trait moving-optimum scenario with a strictly additive genotype-to-breeding-value map, three results emerge. \emph{First}, the analytical identity $\Ag = R^2$ holds at every generation of every replicate, including off-equilibrium configurations during the directional phase and the approach to the new optimum. \emph{Second}, the framework's diagnostic \Ag is approximately three times tighter across replicates than the individual eigenvalues of $\mat{G}$, and about three to four times tighter than several of the underlying constituent quantities, especially the trait-fixed diagonals and $\Vquad$; the algebraic mechanism for this tightness is that \Ag depends on trace-like summaries rather than the full eigenstructure. \emph{Third}, the geometric invariants $\keff$ and $\kappa(\mat{G})$ have qualitatively different across-replicate behaviour: \keff is reproducible to roughly the same tolerance as \Ag, whereas $\kappa(\mat{G})$ is substantially more variable, in line with their differing algebraic dependence on the spectrum.
 
 These results carry a suggestive but not yet rigorous implication for parallel evolution. If two populations independently encounter similar selection regimes, the framework predicts that they will converge on similar \emph{geometric} configurations of $(\vect{b},\mat{H},\mat{G})$ even when the underlying allelic architectures differ---paralleling the long-standing observation that populations adapting to similar environments often arrive at similar phenotypic outcomes via different molecular routes~\citep{Schluter1996,Stern2013}. Our simulation tests a strong version of this claim, in which initial conditions are identical across replicates and only the random seed varies; whether the invariance generalises to populations differing in initial allele frequencies or mutational input is a question for future work, including the comparative-evolution treatment we develop in subsequent papers in this series.
 
