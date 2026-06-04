@@ -1,112 +1,80 @@
-# Appendix S5 SLiM validation: reproducible figures
+# Appendix S5 — SLiM validation
 
-This directory contains the reproducible SLiM and Python pipeline for Appendix S5 of
-*Additive Channels in Curved Fitness Landscapes*.
+This folder rebuilds the three Appendix S5 figures of *Additive Channels in
+Curved Fitness Landscapes*. The figures test the paper's central prediction: that
+the additivity index
 
-The default pipeline runs the four-trait moving-optimum validation described in the manuscript:
-20 stochastic SLiM replicates, seeds `42..61`, fixed population size `N = 2000`, 200 QTLs
-across four traits, a strictly additive genotype-to-breeding-value map, Gaussian stabilising
-selection, and a moving optimum on trait 1 that freezes after generation 40.
-
-## One-command reproduction
-
-From this directory, run:
-
-```bash
-chmod +x run_all.sh
-./run_all.sh
+```
+A_g = V_lin / (V_lin + V_quad),
 ```
 
-The script creates or reuses a local Python virtual environment, installs `numpy`, `pandas`,
-and `matplotlib`, runs the SLiM replicates, computes diagnostics, and builds the Appendix S5
-figures.
+computed from the genetic covariance **G** and the curvature of the fitness
+surface, equals `R^2`, the share of fitness variance that an additive predictor
+explains. If the prediction holds, `A_g` and `R^2` track each other generation by
+generation.
 
-SLiM must already be installed and available on the command line. Check this with:
+## The simulation
+
+A diploid population of N = 2000 evolves under SLiM. Each individual carries four
+traits, each built from 50 freely recombining QTL, 200 loci in all, with no
+pleiotropy. Selection is stabilising toward an optimum that drifts along trait 1
+for 40 generations and then holds; the population runs for 200 generations. The
+moving optimum drives the test. As directional selection compresses **G** through
+the Bulmer effect, the linear and quadratic shares of fitness variance shift, and
+`A_g` rises and then falls. A static optimum hides this trajectory.
+
+The simulation runs 20 replicates with seeds 42 to 61, so the result is a
+distribution. `SIMULATION_DESIGN.md` justifies the parameters.
+
+## Reproducing the figures
+
+One script runs everything:
 
 ```bash
-which slim
-slim -v
+./reproduce_appendix_s5.sh
 ```
 
-If the SLiM executable has a different name or location, run for example:
+It runs the 20 replicates, computes the diagnostics, builds the figures, and
+checks the result. It needs SLiM 5.2 on the `PATH` and Python 3 with `numpy`,
+`pandas`, and `matplotlib` (`pip install -r requirements.txt`).
 
-```bash
-SLIM=/Applications/SLiM.app/Contents/MacOS/slim ./run_all.sh
-```
+Variants:
 
-You can also use `SLIM_BIN=/path/to/slim`.
+| Command | Effect |
+| --- | --- |
+| `./reproduce_appendix_s5.sh --skip-slim` | rebuild the figures from the diagnostic CSVs in `output/`; no SLiM |
+| `./reproduce_appendix_s5.sh -j 20` | run the replicates in parallel |
+| `./reproduce_appendix_s5.sh --clean --quick` | two-replicate smoke test, not the manuscript result |
 
-## Expected outputs
+Each replicate has a fixed seed and runs independently, and the figure step does
+not depend on order, so a parallel run gives the same numbers as a serial one.
 
-After a successful full run, the publication-style outputs are:
+## What the run checks
+
+The figures are stochastic, and image bytes differ across machines, so the run
+does not compare pixels. It checks two identities: the median `|A_g - R^2|` across
+replicates stays near 0.013, and `2*V_quad = sum(mu_i^2)` holds to numerical
+precision. If either fails, the run stops with an error.
+
+## Contents
 
 ```text
-figures/multiseed_4trait_moving.png
-figures/multiseed_4trait_moving.pdf
-figures/cv_4trait_moving.png
-figures/cv_4trait_moving.pdf
-figures/geom_invariants_4trait_moving.png
-figures/geom_invariants_4trait_moving.pdf
-output/appendix_s5_summary.csv
-logs/run_all_environment.txt
-logs/run_all_manifest.txt
+reproduce_appendix_s5.sh     driver: full run, --skip-slim, parallel
+_run_one_replicate.sh        per-replicate worker
+slim_sim_n_traits.slim       the SLiM 5.2 model
+compute_diagnostics.py       per-generation A_g, R^2, V_lin, V_quad, eigenvalues
+make_appendix_s5_figures.py  builds the three figures and the summary
+SIMULATION_DESIGN.md         parameters and rationale
+requirements.txt             Python dependencies
+output/                      per-replicate *_diag.csv and appendix_s5_summary.csv
 ```
 
-The PNG files are convenient for quick inspection; the PDF files are suitable for manuscript or
-archival use. The summary CSV records the numerical checks used in the appendix, including
-`median_abs_Ag_minus_R2_all` and `max_abs_2Vquad_minus_sum_mu2`.
+The diagnostic CSVs and the summary stay in the repository, so `--skip-slim`
+rebuilds the figures without a simulator. A full run also writes raw
+breeding-value dumps (`*_bv.csv`, `*_opt.csv`); these are large, stay out of the
+repository, and ship with the data release.
 
-## Useful script options
+## Software
 
-```bash
-./run_all.sh --clean          # remove previous Appendix S5 outputs before running
-./run_all.sh --resume         # skip replicates whose diagnostic CSV already exists
-./run_all.sh --skip-slim      # rebuild figures from existing output/*_diag.csv files
-./run_all.sh --figures-only   # alias for --skip-slim
-./run_all.sh --quick          # two-replicate smoke test; not the manuscript result
-./run_all.sh --reps 5         # short non-manuscript run
-./run_all.sh --seed-start 100 # start seeds at 100 rather than 42
-./run_all.sh --no-venv        # use the currently active Python/Conda environment
-./run_all.sh --help           # show all options
-```
-
-Use the default 20-replicate run for the manuscript result. The short-run options are only for
-checking that the installation works.
-
-## Main files
-
-```text
-run_all.sh                    one-command reproduction driver
-slim_sim_n_traits.slim         SLiM forward-time simulation
-compute_diagnostics.py         computes G, b, Vlin, Vquad, Ag, empirical R2, eigen checks
-make_appendix_s5_figures.py    aggregates replicates and builds Figures S5.1--S5.3
-requirements.txt               Python dependencies
-SIMULATION_DESIGN.md           detailed design notes
-```
-
-## Outputs not tracked by git
-
-The script writes generated data, figures, logs, and the optional local environment to:
-
-```text
-output/
-figures/
-logs/
-.venv/
-```
-
-These can be omitted from the source repository if the generated CSVs and figures are archived
-separately. If the journal asks for per-replicate files, archive `output/rep_*_4trait_moving_*.csv`
-alongside the source scripts.
-
-## Fast reproduction
-
-For one-command reproduction of the Appendix S5 validation, use the parallel driver:
-
-```bash
-chmod +x run_all.sh
-./run_all.sh --clean --jobs auto
-```
-
-On a high-core Apple Silicon workstation, `./run_all.sh --clean --jobs 20` runs the 20 independent manuscript replicates concurrently. See `README_RUN_ALL.md` for details.
-
+SLiM 5.2 (Haller, Ralph, and Messer, *Molecular Biology and Evolution*
+43(1):msaf313, 2026; <https://messerlab.org/slim>).
