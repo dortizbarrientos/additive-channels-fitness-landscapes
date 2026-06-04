@@ -1,0 +1,23 @@
+Appendix S5 reproduction run
+date: Thu  4 Jun 2026 16:10:50 AEST
+mode: full
+working_directory: /Users/uqdortiz/repos/additiveChannels/toSubmit/additiveChannels/slim
+python: Python 3.10.5
+python_path: /Users/uqdortiz/repos/additiveChannels/toSubmit/additiveChannels/slim/.venv/bin/python
+slim_path: /usr/local/bin/slim
+slim_version: SLiM version 5.2, built Apr 11 2026 16:23:49
+detected_cpu_cores: 24
+parallel_jobs: 20
+parallel_jobs_requested: 20
+n_replicates: 20
+seeds: 42..61
+n_traits: 4
+sigmas: c(0.346, 0.283, 0.200, 0.141)
+gammas: c(0.10, 0.05, 0.04, 0.03)
+drift_velocity: c(0.3, 0.0, 0.0, 0.0)
+drift_end_gen: 40
+OMP_NUM_THREADS: 1
+OPENBLAS_NUM_THREADS: 1
+MKL_NUM_THREADS: 1
+VECLIB_MAXIMUM_THREADS: 1
+NUMEXPR_NUM_THREADS: 1

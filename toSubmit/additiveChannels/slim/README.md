@@ -98,3 +98,15 @@ logs/
 These can be omitted from the source repository if the generated CSVs and figures are archived
 separately. If the journal asks for per-replicate files, archive `output/rep_*_4trait_moving_*.csv`
 alongside the source scripts.
+
+## Fast reproduction
+
+For one-command reproduction of the Appendix S5 validation, use the parallel driver:
+
+```bash
+chmod +x run_all.sh
+./run_all.sh --clean --jobs auto
+```
+
+On a high-core Apple Silicon workstation, `./run_all.sh --clean --jobs 20` runs the 20 independent manuscript replicates concurrently. See `README_RUN_ALL.md` for details.
+
