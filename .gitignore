@@ -141,3 +141,4 @@ audit_figures.py
 *.run.xml
 *.synctex.gz
 *.toc
+art/
