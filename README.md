@@ -1,20 +1,38 @@
-# Additive Channels in Curved Fitness Landscapes — figure reproduction
+# Additive Channels in Curved Fitness Landscapes — examples and figure reproduction
 
 Daniel Ortiz-Barrientos and Mark Cooper
 
-This repository holds the figures of the paper *Additive Channels in Curved
-Fitness Landscapes* (GENETICS), the code that produced them, and a runner that
-verifies them. It does not contain the manuscript text or the submission files.
+This repository includes the worked estimation example and Shiny app for revision 3 of *Additive Channels in Curved Fitness Landscapes* (GENETICS), together with the earlier figure-reproduction files. The main manuscript and editorial correspondence are supplied separately.
 
-The paper's central quantity is the additivity index
+The first-order variance share is
 
 ```
-A_g = V_lin / (V_lin + V_quad),
+A_g = V_lin / (V_lin + V_quad).
 ```
 
-the share of log-fitness variance carried by the linear part of a curved fitness
-surface. Appendix S5 shows in simulation that this analytical quantity equals
-`R^2`, the share of fitness variance that an additive predictor explains.
+It describes variation in a quadratic approximation to log expected fitness across breeding values. Under the stated Gaussian assumptions, it equals the affine R² of that quadratic approximation. It is not generally an identity for realised fitness or for a nonquadratic relationship, and it does not measure evolutionary response accuracy.
+
+## Worked estimation example and Shiny app
+
+[Supplementary File 3](examples/estimating_variance_share/Supplementary_File_3_Worked_Estimation.pdf) follows the estimation steps using simulated height measurements and offspring counts. The true breeding values are hidden from the estimator. The app uses the same code to estimate the fitness relationship, genetic variance, two variance components and their share, with a bootstrap and model checks.
+
+From the repository root:
+
+```bash
+bash run_shiny.sh
+```
+
+This opens the Shiny for Python app locally. To reproduce the saved case with 500 bootstrap replicates:
+
+```bash
+bash run_estimation.sh
+```
+
+Both commands set up a separate Python environment on the first run. Python 3.10 or newer and an internet connection for installation are required; R and SLiM are not needed for this example. The default generating share is 0.6667, the estimate is 0.6107, and the conditional 95% bootstrap interval is 0.5330–0.6857. See the [example README](examples/estimating_variance_share/README.md) for assumptions, file descriptions and checks.
+
+## Earlier figure-reproduction files
+
+The sections below describe the earlier figure package and its original figure and appendix numbering. Its runners and archived files are retained. The worked estimation example above has its own launch commands and does not depend on those runners.
 
 ## Reproducibility
 
