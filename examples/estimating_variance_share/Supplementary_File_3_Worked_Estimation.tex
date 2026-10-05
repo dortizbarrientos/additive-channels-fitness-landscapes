@@ -1,0 +1,184 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=23mm]{geometry}
+\usepackage{amsmath,amssymb,booktabs,graphicx,hyperref,microtype}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{enumitem}
+\hypersetup{hidelinks}
+\setlength{\parskip}{4pt}
+\setlength{\parindent}{0pt}
+\emergencystretch=2em
+\makeatletter
+\providecommand{\@LN}[2]{}\providecommand{\@LN@col}[1]{}
+\makeatother
+\IfFileExists{results/numbers.tex}{\def\casepath{results/}}{\def\casepath{worked_estimation/}}
+\newcommand{\CaseFile}[1]{\input{\casepath#1}}
+\CaseFile{numbers.tex}
+\graphicspath{{results/}{worked_estimation/}}
+\newcommand{\E}{\mathbb E}\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\Ag}{\mathcal A_g}
+\title{Supplementary File 3\\Estimating the variance share from simulated observations}
+\author{Daniel Ortiz-Barrientos and Mark Cooper}
+\date{}
+\begin{document}
+\maketitle
+
+Suppose taller plants tend to leave more offspring, but the advantage weakens and eventually reverses. How much of the variation in log expected fitness can a straight line still describe? This example estimates that share from noisy height measurements and offspring counts. It follows the five steps in the manuscript's section \emph{Estimating the variance share}: define the observations, fit expected fitness, obtain slope and curvature, calculate the variance components, and assess uncertainty and model adequacy. The accompanying Shiny app uses exactly the same analysis code.
+
+The example concerns one population and one reproductive episode. It estimates a description of fitness variation. It does not estimate an evolutionary response or test the manuscript's covariance recursion. All observations are simulated.
+
+\section{Step 1: define the population, trait and reproductive output}
+
+Consider 800 unrelated plant genotypes. In this model, a breeding value is the additive genetic contribution to height. Each genotype's value $A_i$ is expressed in centimetres relative to the population mean. To keep the example identifiable, assume that the genetic contribution to height is wholly additive. Three independent clonal replicates of each genotype provide height deviations $Y_{ij}$:
+\begin{align}
+ A_i&\sim N(0,G), & G&=1\ \mathrm{cm}^2,\label{eq:A}\\
+ Y_{ij}&=A_i+e_{ij}, & e_{ij}&\sim N(0,E),\quad E=1\ \mathrm{cm}^2.\label{eq:measurement}
+\end{align}
+The environmental deviations are independent across replicates and genotypes. There are no permanent environmental effects, dominance or epistasis. These are assumptions of this teaching model. In real clonal data, between-genotype variance can contain nonadditive components; clonal replication alone does not identify additive variance. Here that identification follows from the assumed additive trait model.
+
+A separate reproductive assay provides one count $W_i$ of surviving offspring per genotype. Conditional on $A_i$, that count is independent of the environments used to measure height:
+\begin{align}
+ W_i\mid A_i=a&\sim\operatorname{Poisson}\{W_A(a)\},\label{eq:count}\\
+ \log W_A(a)&=\alpha+ba+\tfrac12Ha^2,\qquad
+ \alpha=\log4,\quad b=0.7\ \mathrm{cm}^{-1},\quad H=-0.7\ \mathrm{cm}^{-2}.\label{eq:surface}
+\end{align}
+The value 4 is expected output at the mean breeding value; it is not the population mean output. The negative curvature allows expected output to increase and then decrease across breeding values. We simulate the conditional relationship directly. We do not construct it from a separate phenotype--fitness function or simulate an inheritance process.
+
+The seed is 20261005. The saved observations contain genotype identifiers, three height measurements and offspring counts. The true breeding values are stored in a separate file and are never passed to the estimator. The default dataset contains \ZeroCount{} zero counts; each is retained in the likelihood.
+
+Before fitting anything, calculate the answer implied by the generating model:
+\begin{align}
+ V_{\rm lin}&=b^2G=0.7^2\times1=0.49,\label{eq:linear}\\
+ V_{\rm quad}&=\tfrac12H^2G^2=\tfrac12\times0.7^2\times1^2=0.245,\label{eq:quadratic}\\
+ \Ag&=\frac{0.49}{0.49+0.245}=\frac23.\label{eq:share}
+\end{align}
+This is a share of variation in log \emph{expected} fitness across breeding values. Poisson variation in individual offspring counts is not included in this denominator.
+
+\section{Step 2: fit the conditional mean while allowing for uncertain breeding values}
+
+\subsection{Use replication to estimate measurement uncertainty}
+Let $m=3$, let $\bar Y_i$ be the mean height deviation for genotype $i$, and let $\bar Y$ be the mean across genotypes. First estimate environmental variance from variation within genotypes:
+\begin{equation}
+ \widehat E=\frac{\sum_{i=1}^{n}\sum_{j=1}^{m}(Y_{ij}-\bar Y_i)^2}{n(m-1)}.
+ \label{eq:Ehat}
+\end{equation}
+Averaging $m$ independent measurements reduces environmental variance to $E/m$. Because $\Var(\bar Y_i)=G+E/m$, the corresponding estimate of genetic variance is
+\begin{equation}
+ \widehat G=\frac{\sum_i(\bar Y_i-\bar Y)^2}{n-1}-\frac{\widehat E}{m}.
+ \label{eq:Ghat}
+\end{equation}
+The default data give $\widehat E=\EstimatedE$ and $\widehat G=\EstimatedG$. A nonpositive estimate of $G$ stops this analysis: the code does not replace it silently with a small positive number.
+
+Under the normal measurement model, the distribution of a genotype's centred breeding value $Z_i=A_i-\mu$ conditional on its height measurements is also normal. Substituting the calibrated parameters gives
+\begin{align}
+ r&=\frac{\widehat G}{\widehat G+\widehat E/m}, &
+ M_i&=r(\bar Y_i-\bar Y),\label{eq:shrink}\\
+ Z_i\mid Y_{i1},\ldots,Y_{im}&\sim N(M_i,v), &
+ v&=\widehat G(1-r).\label{eq:posterior}
+\end{align}
+Here $r=\EstimatedReliability$. The quantity $M_i$ is a prediction of the centred breeding value; $v$ expresses the uncertainty that remains. Replacing $Z_i$ by $M_i$ and discarding $v$ would treat a prediction as an observation. Problems with using estimated breeding values in subsequent regressions are discussed by Hadfield et al.\ (2010).
+
+\subsection{Fit counts, without taking their logarithms}
+We now estimate $\alpha,b,H$ from reproductive counts. For each genotype, average the Poisson probability over the possible breeding values in Equation~\eqref{eq:posterior}:
+\begin{equation}
+ L_i(\alpha,b,H)=\int
+ \frac{\lambda(z)^{W_i}e^{-\lambda(z)}}{W_i!}
+ \phi(z;M_i,v)\,dz,
+ \qquad \lambda(z)=\exp(\alpha+bz+Hz^2/2).
+ \label{eq:likelihood}
+\end{equation}
+The symbol $\phi$ denotes a normal density. Each possible breeding value contributes according to its probability given the height measurements. We maximise $\sum_i\log L_i$. This takes logarithms of probabilities, not of offspring counts, so observations with $W_i=0$ present no difficulty. The use of a log link for expected fitness follows the distinction between response and link scales discussed by Morrissey and Goudie (2022).
+
+The implementation uses normal quadrature: it evaluates the integral at weighted points representing the normal distribution. The default fit uses 41 points. Repeating it with 81 points changes $b$, $H$ and $\Ag$ by less than $4\times10^{-13}$ in this dataset. For other settings and every bootstrap sample, the code increases the quadrature order and checks that the fitted coefficients and likelihood stabilise. It stops rather than reports an unresolved integral. Two starting values are used for optimisation. The primary fit restricts $H\leq0$, matching the stabilising family used here; this example is not designed to fit disruptive selection. Numerical parameter bounds are reported in the code, and a fit at a bound is flagged.
+
+This is a \emph{two-stage estimator}. The height measurements determine $\widehat G$, $\widehat E$ and the conditional normal distributions; the counts then determine the fitness parameters. We do not claim that it is the most efficient estimator or that it replaces a joint pedigree or genomic analysis. The bootstrap below repeats both stages.
+
+Figure~\ref{fig:relationship} distinguishes the relationship fitted to noisy height measurements from the relationship estimated over breeding values. Averaging over uncertainty is needed for both the likelihood and predictions at observed measurements.
+\begin{figure}[htbp]
+\centering\includegraphics[width=\textwidth]{case1_relationship.pdf}
+\caption{Observed counts and the estimated conditional fitness relationship. (a) Each point gives the mean of three height measurements and an offspring count. The curve averages expected output over the uncertain breeding value associated with those measurements. (b) The fitted breeding-value relationship is compared with the generating relationship. The latter is available only because this is a simulation.}
+\label{fig:relationship}
+\end{figure}
+
+\section{Steps 3 and 4: obtain slope, curvature and the variance share}
+
+The fitted log mean is $\widehat\ell_A(z)=\widehat\alpha+\widehat bz+\widehat Hz^2/2$. Differentiating gives
+\begin{equation}
+ \frac{d\widehat\ell_A}{dz}=\widehat b+\widehat Hz,
+ \qquad \frac{d^2\widehat\ell_A}{dz^2}=\widehat H.
+ \label{eq:derivatives}
+\end{equation}
+At the estimated population mean, $z=0$, so the fitted coefficients give the local slope and curvature directly. The factor $1/2$ in the design matrix matters: if software instead fits a coefficient $c$ multiplying $z^2$, then $H=2c$.
+
+Insert these coefficients and $\widehat G$ from Equation~\eqref{eq:Ghat} into Equations~\eqref{eq:linear}--\eqref{eq:share}. Table~\ref{tab:estimates} reports all three inputs and all three outputs. The point estimate is $\widehat\Ag=\EstimatedShare$, compared with the generating value $2/3$. A single dataset need not recover the generating parameters exactly.
+
+\begin{table}[htbp]
+\centering\small
+\CaseFile{estimates_table.tex}
+\caption{Generating values and estimates for seed 20261005. Intervals are 95\% percentile intervals from \BootstrapCount{} parametric bootstrap samples, conditional on the fitted quadratic model. Slope and curvature are evaluated at the estimated population mean, whose sampling uncertainty is included by recalibration in each bootstrap sample.}
+\label{tab:estimates}
+\end{table}
+
+For comparison, the code also fits the shrunken predictions $M_i$ as exact covariates and substitutes their empirical variance for $G$. This naive analysis gives $\widehat\Ag=\NaiveShare$. It is closer to $2/3$ in this particular sample, although both absolute variance components are underestimated. Closeness of a ratio in one dataset does not validate the procedure. Because this comparison re-estimates slope and curvature as well as changing the variance, it does not test the manuscript's narrower bias formula, which holds slope and curvature fixed.
+
+Figure~\ref{fig:components} shows why the two components should accompany their ratio. Their units here are squared natural-log fitness differences. They are not additive and epistatic variance components of height, nor measures of the accuracy of predicting offspring change.
+\begin{figure}[htbp]
+\centering\includegraphics[width=\textwidth]{case2_components.pdf}
+\caption{Variance components and their ratio. (a) The generating, latent-value and naive analyses can yield similar ratios while differing in the amount of variation assigned to each term. (b) The interval applies to the latent-value estimate under the fitted observation model. The generating value has no estimation interval because it is fixed by the simulation parameters.}
+\label{fig:components}
+\end{figure}
+
+\section{Step 5: quantify uncertainty and check the model}
+
+\subsection{Repeat both stages of estimation}
+We use a parametric bootstrap with seed 20261006. For each replicate:
+\begin{enumerate}[itemsep=2pt]
+\item Draw new breeding values from $N(0,\widehat G)$.
+\item Draw three noisy height measurements per genotype using $\widehat E$ and the estimated population mean.
+\item Draw new offspring counts from the fitted quadratic Poisson model.
+\item Re-estimate the measurement mean, $G$ and $E$; refit the fitness relationship; recalculate the two variance components and their share.
+\end{enumerate}
+The 2.5th and 97.5th percentiles of the estimates give the intervals in Table~\ref{tab:estimates}. All \BootstrapCount{} default replicates completed; there were \BootstrapFailures{} failed fits and no primary fits at a parameter bound. The complete replicate estimates are supplied as a CSV file. This checks execution of this example; it is not a study of interval coverage across biological models.
+
+These intervals account for sampling variation and uncertainty in the breeding values and calibrated variances under the assumed model. They do not include uncertainty about whether the biological model is correct. We examine that separately. The app allows 20--1000 replicates; 20 is useful only for seeing how the calculation works. Increasing the number of bootstrap replicates reduces Monte Carlo variation in interval endpoints; it does not remove model bias.
+
+\subsection{Compare fitted and observed quantities on the same scale}
+Group genotypes by their observed mean height. Within each group, compare mean offspring output with predictions that integrate over uncertain breeding values. Also compare the observed fraction of zeros with the fitted Poisson-mixture probability of zero. Figure~\ref{fig:checks} illustrates these checks. Plotting counts against predicted breeding values and overlaying $W_A$ directly would compare different conditional means.
+
+\begin{figure}[htbp]
+\centering\includegraphics[width=\textwidth]{case3_diagnostics.pdf}
+\caption{Checks based on observable data. (a) Observed bin means are compared with quadratic and quartic conditional predictions. Bars show approximate 95\% sampling ranges around the observed means, using the sum of fitted individual predictive variances within each bin. They condition on fitted parameters and are neither simultaneous bands nor confidence intervals for the fitness surface. (b) Observed and predicted zero fractions provide a further check of the count model.}
+\label{fig:checks}
+\end{figure}
+
+\subsection{Examine the quadratic assumption explicitly}
+The app can add a term $-\kappa a^4$ to the generating log mean, with $\kappa=0.08$. The primary analysis still fits a quadratic. A second fit includes cubic and quartic terms, allowing for an estimated population centre. Its purpose is to examine model sensitivity. For the default quadratic data, quartic minus quadratic AIC is \AICDifference; a negative difference would favour the more flexible fit. The two fits share the measurement calibration. This approximate conditional-likelihood comparison is not a formal test of the observation model, and numerical boundaries can affect its interpretation.
+
+The fourth-order scenario demonstrates a distinction that matters for the manuscript. At $a=0$, the added term changes neither slope nor curvature, so the generating \emph{local quadratic share} remains $2/3$. Nevertheless, it changes variation over the population. For a centred Gaussian breeding value,
+\begin{equation}
+ \Var\{\tfrac12HA^2-\kappa A^4\}
+ =\tfrac12H^2G^2-12H\kappa G^3+96\kappa^2G^4.
+ \label{eq:quarticvar}
+\end{equation}
+This follows from $\Var(A^2)=2G^2$, $\operatorname{Cov}(A^2,A^4)=12G^3$ and $\Var(A^4)=96G^4$. The linear term remains uncorrelated with these even terms. Therefore the affine $R^2$ for the complete generating log mean is
+\begin{equation}
+ R^2_{\rm full}=\frac{b^2G}{b^2G+\tfrac12H^2G^2-12H\kappa G^3+96\kappa^2G^4}.
+ \label{eq:quarticR2}
+\end{equation}
+At the stated parameters this is about 0.2424, despite the local quadratic share of 0.6667. A fitted quadratic can consequently summarise the wrong amount of variation when higher-order terms matter. Its bootstrap interval does not repair that mismatch. Nor is the local quadratic share from the quartic fit the $R^2$ of the complete quartic curve.
+
+\section{Using the files and app}
+
+From the repository root, run \texttt{bash run\_estimation.sh} to regenerate the default dataset, estimates, 500 bootstrap samples and three figures. Run \texttt{bash run\_shiny.sh} to open the companion app locally. Both commands create a separate Python environment when needed. The first installation requires an internet connection; later runs use the installed dependencies. No R installation or SLiM run is required.
+
+The app follows the same sequence as this document. Its settings control population size, replication, genetic and environmental variance, slope, curvature, output at the mean and the random seed. Press \emph{Generate and estimate} after changing them. Bootstrap calculations use a separate button. Generating a new dataset clears its previous intervals. The download contains the displayed data, simulation truth, parameter settings, estimates and any completed bootstrap samples.
+
+The folder \texttt{examples/estimating\_variance\_share/} contains annotated Python code, this document's source and PDF, the app and the default results. \texttt{model.py} implements the simulation and estimator; \texttt{run\_case.py} produces the archived example; \texttt{test\_model.py} checks the calculations against Gaussian moments, a closed-form expected output, independent numerical integration and repeated simulations. The Shiny app calls these same functions. The numerical example is deterministic for the recorded seed and software versions in \texttt{results/summary.json}.
+
+For real data, the measurement model must reflect the design. Related individuals need a relationship model; heterogeneous prediction errors need their covariance structure; repeated clonal measurements can include permanent environmental or nonadditive effects. Overdispersion or shared environments can invalidate the Poisson observation model. The worked example establishes a reproducible route through the manuscript's estimation steps under stated assumptions, rather than a general-purpose estimator for every breeding dataset.
+
+\begin{thebibliography}{9}
+\bibitem{Hadfield2010} Hadfield, J. D., A. J. Wilson, D. Garant, B. C. Sheldon and L. E. B. Kruuk (2010). The misuse of BLUP in ecology and evolution. \emph{The American Naturalist} 175:116--125. \url{https://doi.org/10.1086/648604}.
+\bibitem{Morrissey2022} Morrissey, M. B. and I. B. J. Goudie (2022). Analytical results for directional and quadratic selection gradients for log-linear models of fitness functions. \emph{Evolution} 76:1378--1390. \url{https://doi.org/10.1111/evo.14486}.
+\end{thebibliography}
+\end{document}

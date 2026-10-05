@@ -142,3 +142,6 @@ audit_figures.py
 *.synctex.gz
 *.toc
 art/
+
+# Worked estimation example environment
+.venv-estimation/
